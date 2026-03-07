@@ -5,9 +5,15 @@ import { GallerySection } from "@/components/GallerySection";
 import { Footer } from "@/components/Footer";
 
 export const metadata: Metadata = {
-  title: "Postnatal Yoga | Him Yoga",
+  title: "Postnatal Yoga",
   description:
-    "Postpartum recovery with pelvic floor and core focus. Baby-and-me classes and expert-led support for the fourth trimester.",
+    "Postpartum recovery with pelvic floor and core focus. Baby-and-me yoga classes and expert-led support for the fourth trimester. Recover gently after birth.",
+  openGraph: {
+    title: "Postnatal Yoga | Himmu Yoga",
+    description:
+      "Postpartum recovery yoga. Pelvic floor and core recovery, baby-and-me sessions for new parents.",
+    url: "/postnatal",
+  },
 };
 
 const HERO_IMAGE =

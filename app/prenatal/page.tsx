@@ -50,9 +50,15 @@ const PRENATAL_GALLERY_ITEMS = [
 ];
 
 export const metadata: Metadata = {
-  title: "Prenatal Yoga | Him Yoga",
+  title: "Prenatal Yoga",
   description:
-    "Safe prenatal yoga for every trimester. Ease discomfort, build strength, and prepare for birth with expert-led classes.",
+    "Safe prenatal yoga for every trimester. Ease discomfort, build strength, and prepare for birth with expert-led classes. Gentle movement, breathwork, and relaxation for pregnancy.",
+  openGraph: {
+    title: "Prenatal Yoga | Himmu Yoga",
+    description:
+      "Safe prenatal yoga for every trimester. Gentle movement, breathwork, and preparation for birth in a supportive environment.",
+    url: "/prenatal",
+  },
 };
 
 // Replace with your image path (/hero-prenatal.jpg) or external URL
