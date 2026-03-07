@@ -22,8 +22,8 @@ const siteUrl =
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "Himmu Yoga | Prenatal & Postnatal Yoga Classes",
-    template: "%s | Himmu Yoga",
+    default: "Him Yoga | Prenatal & Postnatal Yoga Classes",
+    template: "%s | Him Yoga",
   },
   description:
     "Nurturing your journey through motherhood with prenatal and postnatal yoga. Safe classes for every trimester, baby-and-me sessions, and expert-led information. Find balance, strength, and peace.",
@@ -39,14 +39,14 @@ export const metadata: Metadata = {
     "yoga for pregnancy",
     "fourth trimester yoga",
   ],
-  authors: [{ name: "Himmu Yoga" }],
-  creator: "Himmu Yoga",
+  authors: [{ name: "Him Yoga" }],
+  creator: "Him Yoga",
   openGraph: {
     type: "website",
     locale: "en_IN",
     url: siteUrl,
-    siteName: "Himmu Yoga",
-    title: "Himmu Yoga | Prenatal & Postnatal Health & Yoga",
+    siteName: "Him Yoga",
+    title: "Him Yoga | Prenatal & Postnatal Health & Yoga",
     description:
       "Nurturing your journey through motherhood with prenatal and postnatal yoga. Find balance, strength, and peace.",
     images: [
@@ -54,7 +54,7 @@ export const metadata: Metadata = {
         url: "/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: "Himmu Yoga - Prenatal & Postnatal Yoga",
+        alt: "Him Yoga - Prenatal & Postnatal Yoga",
       },
     ],
   },
@@ -87,7 +87,7 @@ const jsonLd = {
     {
       "@type": "Organization",
       "@id": `${siteUrl}/#organization`,
-      name: "Himmu Yoga",
+      name: "Him Yoga",
       url: siteUrl,
       logo: {
         "@type": "ImageObject",
@@ -95,14 +95,14 @@ const jsonLd = {
       },
       description:
         "Prenatal and postnatal yoga classes. Safe, nurturing classes for pregnancy and the fourth trimester.",
-      email: "hello@himmuyoga.com",
+      email: "himanidwivedi369@gmail.com",
       sameAs: [],
     },
     {
       "@type": "WebSite",
       "@id": `${siteUrl}/#website`,
       url: siteUrl,
-      name: "Himmu Yoga",
+      name: "Him Yoga",
       description: "Prenatal & Postnatal Health & Yoga",
       publisher: { "@id": `${siteUrl}/#organization` },
       inLanguage: "en-IN",

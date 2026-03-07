@@ -1,4 +1,4 @@
-# Himmu Yoga — Prenatal & Postnatal Health & Yoga
+# Him Yoga — Prenatal & Postnatal Health & Yoga
 
 A calming, responsive site for prenatal and postnatal yoga classes.
 

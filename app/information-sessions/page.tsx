@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   description:
     "Expert-led sessions on pregnancy, birth, and postpartum. Tips on labour, breastfeeding, newborn care, and the fourth trimester. Support for every stage.",
   openGraph: {
-    title: "Information Sessions | Himmu Yoga",
+    title: "Information Sessions | Him Yoga",
     description:
       "Expert-led sessions on pregnancy, birth, and postpartum. Tips, guidance, and support for every stage of your journey.",
     url: "/information-sessions",

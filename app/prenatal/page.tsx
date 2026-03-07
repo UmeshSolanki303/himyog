@@ -54,7 +54,7 @@ export const metadata: Metadata = {
   description:
     "Safe prenatal yoga for every trimester. Ease discomfort, build strength, and prepare for birth with expert-led classes. Gentle movement, breathwork, and relaxation for pregnancy.",
   openGraph: {
-    title: "Prenatal Yoga | Himmu Yoga",
+    title: "Prenatal Yoga | Him Yoga",
     description:
       "Safe prenatal yoga for every trimester. Gentle movement, breathwork, and preparation for birth in a supportive environment.",
     url: "/prenatal",

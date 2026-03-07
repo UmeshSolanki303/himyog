@@ -24,13 +24,13 @@ export function Header() {
         </Link>
         <nav className="flex items-center gap-3 sm:gap-6 shrink-0">
           <Link
-            href="/#prenatal"
+            href="/prenatal"
             className="text-xs sm:text-sm text-slate-muted hover:text-charcoal transition-colors whitespace-nowrap"
           >
             Prenatal
           </Link>
           <Link
-            href="/#postnatal"
+            href="/postnatal"
             className="text-xs sm:text-sm text-slate-muted hover:text-charcoal transition-colors whitespace-nowrap"
           >
             Postnatal

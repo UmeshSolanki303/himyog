@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   description:
     "Postpartum recovery with pelvic floor and core focus. Baby-and-me yoga classes and expert-led support for the fourth trimester. Recover gently after birth.",
   openGraph: {
-    title: "Postnatal Yoga | Himmu Yoga",
+    title: "Postnatal Yoga | Him Yoga",
     description:
       "Postpartum recovery yoga. Pelvic floor and core recovery, baby-and-me sessions for new parents.",
     url: "/postnatal",
