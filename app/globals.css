@@ -1,0 +1,36 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --sage: 122 139 98;
+  --beige: 245 243 239;
+  --peach: 252 238 233;
+  --charcoal: 61 66 72;
+}
+
+html {
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+}
+
+/* Reserve space for fixed header so content is not hidden */
+body {
+  --header-height: 4.5rem;
+}
+
+body {
+  background-color: rgb(245 243 239);
+  color: rgb(61 66 72);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  width: 100%;
+  overflow-x: hidden;
+}
+
+/* Optional: reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
