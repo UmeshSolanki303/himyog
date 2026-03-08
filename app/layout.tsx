@@ -25,6 +25,9 @@ export const metadata: Metadata = {
     default: "Him Yoga | Prenatal & Postnatal Yoga Classes",
     template: "%s | Him Yoga",
   },
+  verification: {
+    google: "RqWLJbcd0KAPq0xhWf-jORijQK30lnAJww9tih96ikg", // Replace with your actual code from Step 2
+  },
   description:
     "Nurturing your journey through motherhood with prenatal and postnatal yoga. Safe classes for every trimester, baby-and-me sessions, and expert-led information. Find balance, strength, and peace.",
   keywords: [
@@ -74,10 +77,6 @@ export const metadata: Metadata = {
   },
   alternates: {
     canonical: siteUrl,
-  },
-  verification: {
-    // Add your Google Search Console verification when you have it
-    // google: "your-verification-code",
   },
 };
 
