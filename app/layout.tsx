@@ -21,8 +21,8 @@ const siteUrl =
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "Matru Shakti Yog | Prenatal & Postnatal Yoga Classes",
-    template: "%s | Matru Shakti Yog",
+    default: "MatruShakti Yog | Prenatal & Postnatal Yoga Classes",
+    template: "%s | MatruShakti Yog",
   },
   verification: {
     google: "RqWLJbcd0KAPq0xhWf-jORijQK30lnAJww9tih96ikg",
@@ -40,16 +40,16 @@ export const metadata: Metadata = {
     "postnatal classes",
     "yoga for pregnancy",
     "fourth trimester yoga",
-    "matru shakti yog",
+    "matrushakti yog",
   ],
-  authors: [{ name: "Matru Shakti Yog" }],
-  creator: "Matru Shakti Yog",
+  authors: [{ name: "MatruShakti Yog" }],
+  creator: "MatruShakti Yog",
   openGraph: {
     type: "website",
     locale: "en_IN",
     url: siteUrl,
-    siteName: "Matru Shakti Yog",
-    title: "Matru Shakti Yog | Prenatal & Postnatal Health & Yoga",
+    siteName: "MatruShakti Yog",
+    title: "MatruShakti Yog | Prenatal & Postnatal Health & Yoga",
     description:
       "Nurturing your journey through motherhood with prenatal and postnatal yoga. Find balance, strength, and peace.",
     images: [
@@ -57,13 +57,13 @@ export const metadata: Metadata = {
         url: "/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: "Matru Shakti Yog - Prenatal & Postnatal Yoga",
+        alt: "MatruShakti Yog - Prenatal & Postnatal Yoga",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Matru Shakti Yog | Prenatal & Postnatal Yoga",
+    title: "MatruShakti Yog | Prenatal & Postnatal Yoga",
     description:
       "Nurturing your journey through motherhood with prenatal and postnatal yoga.",
   },
@@ -86,7 +86,7 @@ const jsonLd = {
     {
       "@type": "Organization",
       "@id": `${siteUrl}/#organization`,
-      name: "Matru Shakti Yog",
+      name: "MatruShakti Yog",
       url: siteUrl,
       logo: {
         "@type": "ImageObject",
@@ -101,7 +101,7 @@ const jsonLd = {
       "@type": "WebSite",
       "@id": `${siteUrl}/#website`,
       url: siteUrl,
-      name: "Matru Shakti Yog",
+      name: "MatruShakti Yog",
       description: "Prenatal & Postnatal Health & Yoga",
       publisher: { "@id": `${siteUrl}/#organization` },
       inLanguage: "en-IN",

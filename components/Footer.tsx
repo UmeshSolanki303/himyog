@@ -21,7 +21,7 @@ export function Footer() {
         >
           <div className="text-center md:text-left">
             <p className="font-serif text-lg sm:text-xl text-white font-medium">
-              Matru Shakti Yog
+              MatruShakti Yog
             </p>
             <p className="text-beige-300 text-xs sm:text-sm mt-1">
               Prenatal & Postnatal Health & Yoga
