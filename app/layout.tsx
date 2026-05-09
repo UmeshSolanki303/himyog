@@ -16,17 +16,16 @@ const sourceSans = Source_Sans_3({
 });
 
 const siteUrl =
-  process.env.NEXT_PUBLIC_SITE_URL ||
-  "https://umeshsolanki303.github.io/himyog";
+  process.env.NEXT_PUBLIC_SITE_URL || "https://matrushaktiyog.com";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "Him Yoga | Prenatal & Postnatal Yoga Classes",
-    template: "%s | Him Yoga",
+    default: "Matru Shakti Yog | Prenatal & Postnatal Yoga Classes",
+    template: "%s | Matru Shakti Yog",
   },
   verification: {
-    google: "RqWLJbcd0KAPq0xhWf-jORijQK30lnAJww9tih96ikg", // Replace with your actual code from Step 2
+    google: "RqWLJbcd0KAPq0xhWf-jORijQK30lnAJww9tih96ikg",
   },
   description:
     "Nurturing your journey through motherhood with prenatal and postnatal yoga. Safe classes for every trimester, baby-and-me sessions, and expert-led information. Find balance, strength, and peace.",
@@ -41,15 +40,16 @@ export const metadata: Metadata = {
     "postnatal classes",
     "yoga for pregnancy",
     "fourth trimester yoga",
+    "matru shakti yog",
   ],
-  authors: [{ name: "Him Yoga" }],
-  creator: "Him Yoga",
+  authors: [{ name: "Matru Shakti Yog" }],
+  creator: "Matru Shakti Yog",
   openGraph: {
     type: "website",
     locale: "en_IN",
     url: siteUrl,
-    siteName: "Him Yoga",
-    title: "Him Yoga | Prenatal & Postnatal Health & Yoga",
+    siteName: "Matru Shakti Yog",
+    title: "Matru Shakti Yog | Prenatal & Postnatal Health & Yoga",
     description:
       "Nurturing your journey through motherhood with prenatal and postnatal yoga. Find balance, strength, and peace.",
     images: [
@@ -57,13 +57,13 @@ export const metadata: Metadata = {
         url: "/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: "Him Yoga - Prenatal & Postnatal Yoga",
+        alt: "Matru Shakti Yog - Prenatal & Postnatal Yoga",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Him Yoga | Prenatal & Postnatal Yoga",
+    title: "Matru Shakti Yog | Prenatal & Postnatal Yoga",
     description:
       "Nurturing your journey through motherhood with prenatal and postnatal yoga.",
   },
@@ -86,7 +86,7 @@ const jsonLd = {
     {
       "@type": "Organization",
       "@id": `${siteUrl}/#organization`,
-      name: "Him Yoga",
+      name: "Matru Shakti Yog",
       url: siteUrl,
       logo: {
         "@type": "ImageObject",
@@ -101,7 +101,7 @@ const jsonLd = {
       "@type": "WebSite",
       "@id": `${siteUrl}/#website`,
       url: siteUrl,
-      name: "Him Yoga",
+      name: "Matru Shakti Yog",
       description: "Prenatal & Postnatal Health & Yoga",
       publisher: { "@id": `${siteUrl}/#organization` },
       inLanguage: "en-IN",

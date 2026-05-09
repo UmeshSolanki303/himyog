@@ -2,6 +2,7 @@ import { Hero } from "@/components/Hero";
 import { CardsSection } from "@/components/CardsSection";
 import { Benefits } from "@/components/Benefits";
 import { ClassSection } from "@/components/ClassSection";
+import { CoursesSection } from "@/components/CoursesSection";
 import { Footer } from "@/components/Footer";
 
 // Placeholder URLs — replace with your Google Form links when ready
@@ -16,6 +17,7 @@ export default function Home() {
       <Hero />
       <CardsSection />
       <Benefits />
+      <CoursesSection />
       <ClassSection
         id="prenatal"
         title="Prenatal Yoga"

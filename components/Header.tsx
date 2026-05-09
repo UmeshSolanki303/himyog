@@ -13,13 +13,13 @@ export function Header() {
         <Link
           href="/"
           className="flex items-center gap-2 min-w-0 shrink-0"
-          aria-label="Him Yoga - Home"
+          aria-label="Matru Shakti Yog - Home"
         >
           <span className="flex shrink-0 w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center bg-sage-100 text-sage-600">
             <Leaf className="w-5 h-5 sm:w-6 sm:h-6" strokeWidth={1.5} />
           </span>
           <span className="font-serif text-lg sm:text-xl font-medium text-charcoal hover:text-sage-600 transition-colors truncate">
-            Him Yoga
+            Matru Shakti Yog
           </span>
         </Link>
         <nav className="flex items-center gap-3 sm:gap-6 shrink-0">
@@ -40,6 +40,12 @@ export function Header() {
             className="text-xs sm:text-sm text-slate-muted hover:text-charcoal transition-colors whitespace-nowrap"
           >
             Information
+          </Link>
+          <Link
+            href="/courses"
+            className="text-xs sm:text-sm font-medium text-white bg-sage-500 hover:bg-sage-600 transition-colors whitespace-nowrap px-3 py-1.5 rounded-lg"
+          >
+            Courses
           </Link>
         </nav>
       </div>
