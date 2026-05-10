@@ -1,6 +1,7 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useRef } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
 
 interface ContentSectionProps {
   title?: string;
@@ -49,27 +50,43 @@ export function ContentImage({
   alt: string;
   caption?: string;
 }) {
+  const ref = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start 0.85", "center 0.6"],
+  });
+  const clipPath = useTransform(
+    scrollYProgress,
+    [0, 1],
+    ["inset(0% 35% 0% 35% round 24px)", "inset(0% 0% 0% 0% round 12px)"]
+  );
+  const opacity = useTransform(scrollYProgress, [0, 0.2], [0, 1]);
+
   return (
-    <motion.figure
-      initial={{ opacity: 0, y: 16 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      className="my-10"
-    >
-      <div className="aspect-video rounded-2xl overflow-hidden bg-beige-200">
+    <figure ref={ref} className="my-10">
+      <motion.div
+        style={{ clipPath, opacity }}
+        className="aspect-video bg-beige-200 overflow-hidden"
+      >
         <div
           className="w-full h-full bg-cover bg-center"
           style={{ backgroundImage: `url(${src})` }}
           role="img"
           aria-label={alt}
         />
-      </div>
+      </motion.div>
       {caption && (
-        <figcaption className="mt-3 text-sm text-slate-muted text-center">
+        <motion.figcaption
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.4 }}
+          className="mt-3 text-sm text-slate-muted text-center"
+        >
           {caption}
-        </figcaption>
+        </motion.figcaption>
       )}
-    </motion.figure>
+    </figure>
   );
 }
 

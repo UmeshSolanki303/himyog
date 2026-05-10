@@ -34,11 +34,12 @@ const container = {
 };
 
 const item = {
-  hidden: { opacity: 0, y: 20 },
+  hidden: { opacity: 0, y: 24, scale: 0.93 },
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] },
+    scale: 1,
+    transition: { duration: 0.55, ease: [0.34, 1.56, 0.64, 1] },
   },
 };
 
@@ -78,9 +79,13 @@ export function Benefits() {
               variants={item}
               className="rounded-2xl sm:rounded-3xl bg-white p-6 sm:p-8 shadow-soft hover:shadow-soft-lg transition-shadow duration-300 border border-beige-200/60"
             >
-              <div className="w-14 h-14 rounded-2xl bg-sage-100 flex items-center justify-center text-sage-600 mb-6">
+              <motion.div
+                className="w-14 h-14 rounded-2xl bg-sage-100 flex items-center justify-center text-sage-600 mb-6"
+                whileHover={{ rotate: 8, scale: 1.1 }}
+                transition={{ type: "spring", stiffness: 300, damping: 15 }}
+              >
                 <benefit.icon className="w-7 h-7" strokeWidth={1.5} />
-              </div>
+              </motion.div>
               <h3 className="font-serif text-xl text-charcoal font-medium mb-3">
                 {benefit.title}
               </h3>
