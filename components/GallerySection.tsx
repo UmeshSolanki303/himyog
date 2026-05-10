@@ -69,10 +69,10 @@ export function GallerySection({
               <motion.div
                 className="relative aspect-[4/5] sm:aspect-[3/4] rounded-2xl overflow-hidden bg-beige-200 shadow-soft border border-beige-200/80"
                 whileHover={{
-                  y: -8,
+                  y: -6,
                   boxShadow:
-                    "0 20px 50px -12px rgba(122, 139, 98, 0.2), 0 8px 24px -4px rgba(0, 0, 0, 0.08)",
-                  transition: { duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] },
+                    "0 20px 48px -8px rgba(201, 132, 122, 0.28), 0 8px 20px -4px rgba(201, 132, 122, 0.14)",
+                  transition: { duration: 0.35, ease: [0.25, 0.46, 0.45, 0.94] },
                 }}
               >
                 <motion.div
@@ -80,6 +80,13 @@ export function GallerySection({
                   style={{ backgroundImage: `url(${item.src})` }}
                   whileHover={{ scale: 1.08 }}
                   transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
+                  aria-hidden
+                />
+                <motion.div
+                  className="absolute inset-0 bg-sage-500/10 rounded-2xl"
+                  initial={{ opacity: 0 }}
+                  whileHover={{ opacity: 1 }}
+                  transition={{ duration: 0.35 }}
                   aria-hidden
                 />
                 <div

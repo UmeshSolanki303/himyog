@@ -49,6 +49,19 @@ const item = {
   },
 };
 
+const imgVariants = {
+  rest: { scale: 1 },
+  hover: {
+    scale: 1.06,
+    transition: { duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] },
+  },
+};
+
+const tintVariants = {
+  rest: { opacity: 0 },
+  hover: { opacity: 1, transition: { duration: 0.4 } },
+};
+
 export function CardsSection() {
   return (
     <SectionReveal
@@ -79,15 +92,26 @@ export function CardsSection() {
           className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8"
         >
           {cards.map((card) => (
-            <motion.div key={card.href} variants={item}>
+            <motion.div
+              key={card.href}
+              variants={item}
+              initial="rest"
+              whileHover="hover"
+            >
               <Link
                 href={card.href}
                 className="group block h-full rounded-3xl overflow-hidden bg-beige-50 border border-beige-200/60 shadow-soft hover:shadow-soft-lg hover:border-sage-200 transition-all duration-300"
               >
                 <div className="relative aspect-[4/3] overflow-hidden">
-                  <div
-                    className="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
+                  <motion.div
+                    className="absolute inset-0 bg-cover bg-center"
                     style={{ backgroundImage: `url(${card.image})` }}
+                    variants={imgVariants}
+                    aria-hidden
+                  />
+                  <motion.div
+                    className="absolute inset-0 bg-sage-500/12"
+                    variants={tintVariants}
                     aria-hidden
                   />
                   {/* Hover overlay: show details on image hover */}
