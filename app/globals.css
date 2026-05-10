@@ -3,10 +3,11 @@
 @tailwind utilities;
 
 :root {
-  --sage: 122 139 98;
-  --beige: 245 243 239;
-  --peach: 252 238 233;
-  --charcoal: 61 66 72;
+  --sage: 201 132 122;
+  --beige: 250 245 239;
+  --peach: 240 196 184;
+  --charcoal: 61 53 49;
+  --warm-sage: 143 175 138;
 }
 
 html {
