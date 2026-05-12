@@ -29,11 +29,11 @@ export function Footer() {
           </div>
           <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6 text-center sm:text-left">
             <a
-              href="mailto:himanidwivedi369@gmail.com"
+              href="mailto:matrushaktiyog@gmail.com"
               className="inline-flex items-center justify-center sm:justify-start gap-2 text-beige-200 hover:text-white transition-colors text-sm sm:text-base break-all"
             >
               <Mail className="w-5 h-5 shrink-0" />
-              <span>himanidwivedi369@gmail.com</span>
+              <span>matrushaktiyog@gmail.com</span>
             </a>
             <div className="flex gap-4">
               {socialLinks.map(({ icon: Icon, label, href }) => (

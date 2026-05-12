@@ -94,7 +94,7 @@ const jsonLd = {
       },
       description:
         "Prenatal and postnatal yoga classes. Safe, nurturing classes for pregnancy and the fourth trimester.",
-      email: "himanidwivedi369@gmail.com",
+      email: "matrushaktiyog@gmail.com",
       sameAs: [],
     },
     {
