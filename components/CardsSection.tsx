@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { SectionReveal } from "./SectionReveal";
 
@@ -36,20 +36,28 @@ const container = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    transition: { staggerChildren: 0.12 },
+    transition: { staggerChildren: 0.14 },
   },
 };
 
+// Cards slide from: left, bottom, right
 const item = {
-  hidden: { opacity: 0, y: 20 },
+  hidden: (i: number) => ({
+    opacity: 0,
+    x: i === 0 ? -36 : i === 2 ? 36 : 0,
+    y: i === 1 ? 28 : 0,
+  }),
   visible: {
     opacity: 1,
+    x: 0,
     y: 0,
-    transition: { duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] },
+    transition: { duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] },
   },
 };
 
 export function CardsSection() {
+  const shouldReduce = useReducedMotion();
+
   return (
     <SectionReveal
       as="section"
@@ -71,6 +79,7 @@ export function CardsSection() {
             Join live classes and find support for every stage of your journey.
           </p>
         </motion.div>
+
         <motion.div
           variants={container}
           initial="hidden"
@@ -78,8 +87,13 @@ export function CardsSection() {
           viewport={{ once: true, margin: "-60px" }}
           className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8"
         >
-          {cards.map((card) => (
-            <motion.div key={card.href} variants={item}>
+          {cards.map((card, index) => (
+            <motion.div
+              key={card.href}
+              variants={item}
+              custom={index}
+              whileHover={shouldReduce ? {} : { y: -8, transition: { duration: 0.3 } }}
+            >
               <Link
                 href={card.href}
                 className="group block h-full rounded-3xl overflow-hidden bg-beige-50 border border-beige-200/60 shadow-soft hover:shadow-soft-lg hover:border-sage-200 transition-all duration-300"
@@ -90,7 +104,7 @@ export function CardsSection() {
                     style={{ backgroundImage: `url(${card.image})` }}
                     aria-hidden
                   />
-                  {/* Hover overlay: show details on image hover */}
+                  {/* Hover overlay */}
                   <div className="absolute inset-0 bg-gradient-to-t from-charcoal-dark/90 via-charcoal-dark/40 to-transparent opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4 sm:p-6">
                     <p className="text-beige-100 text-xs sm:text-sm leading-relaxed mb-3 sm:mb-4">
                       {card.description}

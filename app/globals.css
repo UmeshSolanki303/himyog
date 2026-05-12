@@ -34,3 +34,23 @@ body {
     scroll-behavior: auto;
   }
 }
+
+/* Subtle gradient shimmer for hero headline accent */
+.text-shimmer {
+  background: linear-gradient(90deg, #4c573d 0%, #7a8b62 45%, #5f6e4c 60%, #7a8b62 75%, #4c573d 100%);
+  background-size: 250% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .text-shimmer {
+    animation: text-shimmer 7s ease-in-out infinite;
+  }
+
+  @keyframes text-shimmer {
+    0%, 100% { background-position: 0% center; }
+    50% { background-position: 100% center; }
+  }
+}
