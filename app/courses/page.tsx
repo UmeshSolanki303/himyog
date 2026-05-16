@@ -20,7 +20,7 @@ export default function CoursesPage() {
         description="Structured programs designed to support you through every stage of pregnancy, birth, and the fourth trimester."
       />
 
-      <section className="py-12 sm:py-20 md:py-24 bg-white w-full">
+      <section className="py-12 sm:py-20 md:py-24 bg-beige-50 w-full">
         <div className="mx-auto px-4 sm:px-6" style={{ maxWidth: "84rem" }}>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {courses.map((course) => (

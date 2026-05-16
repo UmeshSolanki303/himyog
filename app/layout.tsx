@@ -20,9 +20,14 @@ const siteUrl =
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
+  icons: {
+    icon: "/images/logo.jpeg",
+    apple: "/images/logo.jpeg",
+    shortcut: "/images/logo.jpeg",
+  },
   title: {
-    default: "MatruShakti Yog | Prenatal & Postnatal Yoga Classes",
-    template: "%s | MatruShakti Yog",
+    default: "Matrushakti Yog | Prenatal & Postnatal Yoga Classes",
+    template: "%s | Matrushakti Yog",
   },
   verification: {
     google: "RqWLJbcd0KAPq0xhWf-jORijQK30lnAJww9tih96ikg",
@@ -42,14 +47,14 @@ export const metadata: Metadata = {
     "fourth trimester yoga",
     "matrushakti yog",
   ],
-  authors: [{ name: "MatruShakti Yog" }],
-  creator: "MatruShakti Yog",
+  authors: [{ name: "Matrushakti Yog" }],
+  creator: "Matrushakti Yog",
   openGraph: {
     type: "website",
     locale: "en_IN",
     url: siteUrl,
-    siteName: "MatruShakti Yog",
-    title: "MatruShakti Yog | Prenatal & Postnatal Health & Yoga",
+    siteName: "Matrushakti Yog",
+    title: "Matrushakti Yog | Prenatal & Postnatal Health & Yoga",
     description:
       "Nurturing your journey through motherhood with prenatal and postnatal yoga. Find balance, strength, and peace.",
     images: [
@@ -57,13 +62,13 @@ export const metadata: Metadata = {
         url: "/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: "MatruShakti Yog - Prenatal & Postnatal Yoga",
+        alt: "Matrushakti Yog - Prenatal & Postnatal Yoga",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "MatruShakti Yog | Prenatal & Postnatal Yoga",
+    title: "Matrushakti Yog | Prenatal & Postnatal Yoga",
     description:
       "Nurturing your journey through motherhood with prenatal and postnatal yoga.",
   },
@@ -86,11 +91,11 @@ const jsonLd = {
     {
       "@type": "Organization",
       "@id": `${siteUrl}/#organization`,
-      name: "MatruShakti Yog",
+      name: "Matrushakti Yog",
       url: siteUrl,
       logo: {
         "@type": "ImageObject",
-        url: `${siteUrl}/logo.png`,
+        url: `${siteUrl}/logo-bk.png`,
       },
       description:
         "Prenatal and postnatal yoga classes. Safe, nurturing classes for pregnancy and the fourth trimester.",
@@ -101,7 +106,7 @@ const jsonLd = {
       "@type": "WebSite",
       "@id": `${siteUrl}/#website`,
       url: siteUrl,
-      name: "MatruShakti Yog",
+      name: "Matrushakti Yog",
       description: "Prenatal & Postnatal Health & Yoga",
       publisher: { "@id": `${siteUrl}/#organization` },
       inLanguage: "en-IN",

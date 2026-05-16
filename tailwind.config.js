@@ -8,54 +8,64 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        // Primary — Dusty Rose (Lotus Bloom palette)
+        // Primary — Rose Maroon (logo's main silhouette & lotus)
         sage: {
-          50: "#fdf6f5",
-          100: "#f9e8e6",
-          200: "#f2cdc9",
-          300: "#e5aba5",
-          400: "#d99490",
-          500: "#C9847A",
-          600: "#b36d63",
-          700: "#8f534a",
-          800: "#7a4540",
-          900: "#653a36",
+          50: "#FDF5F8",
+          100: "#F8DEE8",
+          200: "#F0BCCC",
+          300: "#E490B4",
+          400: "#CB6490",
+          500: "#B84070", // logo's main rose tone
+          600: "#9C2458", // deep rose
+          700: "#7C1440", // dark maroon (logo top)
+          800: "#621030",
+          900: "#4C0C24",
         },
         // Background — Cream Ivory
         beige: {
-          50: "#fdfaf8",
+          50: "#FDFAF8",
           100: "#FAF5EF",
-          200: "#f4ebe0",
-          300: "#e8d5c6",
-          400: "#d9bfaa",
+          200: "#F5EAE0",
+          300: "#EDD8C8",
+          400: "#E0C4B0",
         },
-        // Secondary — Blush Pink
+        // Warm Peach — baby figure & highlight tones from logo
         peach: {
-          50: "#fef8f6",
-          100: "#fdf0eb",
-          200: "#F0C4B8",
-          300: "#e5a898",
-          400: "#d48878",
+          50: "#FEF9F5",
+          100: "#FDF0E8",
+          200: "#F8D4B4",
+          300: "#F0B488",
+          400: "#E49060",
         },
-        // Accent — Warm Sage Green
+        // Leaf Green — botanical element in logo
         "warm-sage": {
-          50: "#f3f7f3",
-          100: "#e2ede2",
-          200: "#c4dbc5",
-          300: "#8FAF8A",
-          400: "#6e9470",
-          500: "#547a56",
-          600: "#406142",
+          50: "#F2F8EE",
+          100: "#E2EFD4",
+          200: "#C0DAAA",
+          300: "#88BA70",
+          400: "#567E40",
+          500: "#3C6028",
+          600: "#2C4820",
         },
-        // Text — Warm Charcoal
+        // Gold — decorative circle border & infinity symbol in logo
+        gold: {
+          50: "#FEF9E8",
+          100: "#FBF0C4",
+          200: "#F5DC88",
+          300: "#ECC44A",
+          400: "#D4A428",
+          500: "#B88818",
+          600: "#9A7010",
+        },
+        // Text — Warm Charcoal (plum-tinted to complement rose palette)
         charcoal: {
-          DEFAULT: "#3D3531",
-          light: "#6b5a56",
-          dark: "#2a2320",
+          DEFAULT: "#3D2830",
+          light: "#6B4852",
+          dark: "#2A1820",
         },
         slate: {
-          muted: "#7a6b68",
-          soft: "#a89694",
+          muted: "#7A6870",
+          soft: "#A89698",
         },
       },
       fontFamily: {
@@ -63,9 +73,9 @@ module.exports = {
         sans: ["var(--font-source-sans)", "system-ui", "sans-serif"],
       },
       boxShadow: {
-        soft: "0 4px 20px -2px rgba(201, 132, 122, 0.08), 0 2px 8px -2px rgba(0, 0, 0, 0.04)",
+        soft: "0 4px 20px -2px rgba(184, 64, 112, 0.08), 0 2px 8px -2px rgba(0, 0, 0, 0.04)",
         "soft-lg":
-          "0 10px 40px -4px rgba(201, 132, 122, 0.12), 0 4px 16px -4px rgba(0, 0, 0, 0.06)",
+          "0 10px 40px -4px rgba(184, 64, 112, 0.12), 0 4px 16px -4px rgba(0, 0, 0, 0.06)",
       },
       borderRadius: {
         "2xl": "1rem",

@@ -67,7 +67,7 @@ const HERO_IMAGE =
 
 export default function PrenatalPage() {
   return (
-    <main className="pb-12 sm:pb-16 lg:pb-20">
+    <main>
       <PageHero
         title="Prenatal Yoga"
         description="Safe, gentle yoga for every trimester. Ease discomfort, build strength, and prepare your body and mind for birth in a supportive environment."

@@ -67,7 +67,7 @@ export function GallerySection({
               className="group relative"
             >
               <motion.div
-                className="relative aspect-[4/5] sm:aspect-[3/4] rounded-2xl overflow-hidden bg-beige-200 shadow-soft border border-beige-200/80"
+                className="relative aspect-[4/3] sm:aspect-[3/4] rounded-2xl overflow-hidden bg-beige-200 shadow-soft border border-beige-200/80"
                 whileHover={{
                   y: -6,
                   boxShadow:

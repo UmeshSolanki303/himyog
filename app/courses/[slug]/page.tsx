@@ -5,6 +5,7 @@ import { ArrowLeft, Clock, Monitor, Users, CheckCircle2, BookOpen } from "lucide
 import { courses, getCourseBySlug } from "@/lib/courses";
 import { CtaButton } from "@/components/CtaButton";
 import { Footer } from "@/components/Footer";
+import { MobileEnrollBar } from "@/components/MobileEnrollBar";
 
 interface Props {
   params: { slug: string };
@@ -28,7 +29,7 @@ export default function CourseDetailPage({ params }: Props) {
   if (!course) notFound();
 
   return (
-    <main>
+    <main className="pb-20 lg:pb-0">
       {/* Hero */}
       <section className="relative min-h-[50vh] flex items-end w-full overflow-hidden">
         <div
@@ -201,6 +202,7 @@ export default function CourseDetailPage({ params }: Props) {
       </section>
 
       <Footer />
+      <MobileEnrollBar title={course.title} price={course.price} formUrl={course.formUrl} />
     </main>
   );
 }
