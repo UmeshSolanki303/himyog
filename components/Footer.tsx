@@ -56,7 +56,7 @@ export function Footer() {
           className="mt-10 pt-8 border-t border-charcoal/60 text-center text-slate-soft text-sm"
         >
           <p>
-            © {new Date().getFullYear()} MatruShakti Yog. All rights reserved.
+            © {new Date().getFullYear()} MatruShaktiYog. All rights reserved.
           </p>
         </motion.div>
       </div>
