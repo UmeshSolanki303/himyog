@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
+import { assetPath } from "@/lib/assetPath";
 import { motion, useReducedMotion } from "framer-motion";
 import { Award } from "lucide-react";
 import { SectionReveal } from "./SectionReveal";
@@ -67,11 +67,10 @@ function ProfileAvatar({
       {/* Avatar */}
       <div className="relative w-full h-full rounded-full overflow-hidden bg-gradient-to-br from-sage-200 to-sage-500">
         {!imgError ? (
-          <Image
-            src={image}
+          <img
+            src={assetPath(image)}
             alt={name}
-            fill
-            className="object-cover"
+            className="w-full h-full object-cover"
             onError={() => setImgError(true)}
           />
         ) : (

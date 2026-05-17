@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
-import Image from "next/image";
+import { assetPath } from "@/lib/assetPath";
 import {
   motion,
   useScroll,
@@ -47,11 +47,10 @@ function HeroLogo() {
   }
 
   return (
-    <Image
-      src="/images/logo-bk.png"
+    <img
+      src={assetPath("/images/logo-bk.png")}
       alt="Matrushakti Yog"
-      fill
-      className="object-contain"
+      className="w-full h-full object-contain"
       style={{ mixBlendMode: "multiply" }}
       onError={() => setImgError(true)}
     />

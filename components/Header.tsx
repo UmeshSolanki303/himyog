@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { usePathname } from "next/navigation";
+import { assetPath } from "@/lib/assetPath";
 import {
   motion,
   useScroll,
@@ -63,12 +63,11 @@ function LogoBadge() {
   }
 
   return (
-    <span className="relative flex shrink-0 w-10 h-10 sm:w-12 sm:h-12 rounded-2xl overflow-hidden bg-white ring-2 ring-sage-200/70 shadow-soft">
-      <Image
-        src="/images/logo-bk.png"
+    <span className="flex shrink-0 w-10 h-10 sm:w-12 sm:h-12 rounded-2xl overflow-hidden bg-white ring-2 ring-sage-200/70 shadow-soft">
+      <img
+        src={assetPath("/images/logo-bk.png")}
         alt=""
-        fill
-        className="object-contain"
+        className="w-full h-full object-contain"
         style={{ mixBlendMode: "multiply" }}
         onError={() => setImgError(true)}
       />
