@@ -72,7 +72,7 @@ export function Hero() {
     <section
       ref={ref}
       id="hero"
-      className="relative min-h-screen min-h-[100dvh] flex flex-col md:flex-row items-stretch w-full overflow-hidden"
+      className="relative min-h-[calc(100dvh-var(--header-height))] flex flex-col md:flex-row items-stretch w-full overflow-hidden"
     >
       {/* Gradient background — no photo, uses logo colour palette */}
       <motion.div
@@ -95,7 +95,7 @@ export function Hero() {
       </div>
 
       {/* Left: content */}
-      <div className="relative z-10 flex-1 flex flex-col justify-center pt-8 pb-6 sm:py-12 px-5 sm:px-6 lg:px-12 xl:px-16">
+      <div className="relative z-10 flex-1 flex flex-col justify-start md:justify-center pt-8 sm:pt-10 md:pt-0 pb-6 sm:pb-10 md:py-12 px-5 sm:px-6 lg:px-12 xl:px-16">
         <div className="w-full max-w-lg mx-auto md:mx-0">
           {/* Decorative brand line */}
           <motion.div
