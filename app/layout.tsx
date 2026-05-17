@@ -18,12 +18,14 @@ const sourceSans = Source_Sans_3({
 const siteUrl =
   process.env.NEXT_PUBLIC_SITE_URL || "https://matrushaktiyog.com";
 
+const bp = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   icons: {
-    icon: "/images/logo.jpeg",
-    apple: "/images/logo.jpeg",
-    shortcut: "/images/logo.jpeg",
+    icon: `${bp}/images/logo.jpeg`,
+    apple: `${bp}/images/logo.jpeg`,
+    shortcut: `${bp}/images/logo.jpeg`,
   },
   title: {
     default: "Matrushakti Yog | Prenatal & Postnatal Yoga Classes",
