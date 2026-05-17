@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
+import Image from "next/image";
 import {
   motion,
   useScroll,
@@ -46,10 +47,11 @@ function HeroLogo() {
   }
 
   return (
-    <img
+    <Image
       src="/images/logo-bk.png"
       alt="Matrushakti Yog"
-      className="w-full h-full object-contain"
+      fill
+      className="object-contain"
       style={{ mixBlendMode: "multiply" }}
       onError={() => setImgError(true)}
     />
