@@ -14,79 +14,83 @@ interface Review {
 
 const row1: Review[] = [
   {
-    quote:
-      "Matrushakti Yog completely transformed my pregnancy. I felt strong, supported, and deeply connected to my baby in every single class.",
-    name: "Sneha Raghavan",
-    context: "Prenatal Yoga · 2nd Trimester",
+    quote: `To Himani Ma'am 🙏
+I just wanted to take a moment to express my deepest gratitude to you. You have been truly incredible, and in ways you may not even realize, you have helped me grow and heal during a time when I needed it the most.Your guidance, calm presence, and positive energy have brought so much peace and strength into my life. Even without knowing everything I was going through, you made a difference that I will always carry with me.
+I also humbly seek your blessings for something very important in my life. Your blessings mean a lot to me, and I truly believe in your positive energy.
+Thank you once again for being such a beautiful soul and an inspiring teacher.
+With heartfelt gratitude,`,
+    name: "Himakshi Vyas",
+    context: "Prenatal-Postnatal TTC",
     stars: 5,
   },
-  {
-    quote:
-      "The postnatal sessions helped me rediscover my body after birth. I recovered faster and felt genuinely empowered as a new mother.",
-    name: "Divya Krishnamurthy",
-    context: "Postnatal Recovery",
-    stars: 5,
-  },
-  {
-    quote:
-      "I attended the information sessions and they were incredible — evidence-based, compassionate, and exactly what I needed in my first trimester.",
-    name: "Meera Joshi",
-    context: "Information Sessions",
-    stars: 5,
-  },
-  {
-    quote:
-      "The baby-and-me classes were so special. A beautiful way to bond with my little one while taking care of myself in the fourth trimester.",
-    name: "Kavya Nair",
-    context: "Baby & Me Classes",
-    stars: 5,
-  },
-  {
-    quote:
-      "As a first-time mum, I was nervous about prenatal yoga. The instructor made everything feel safe, joyful, and welcoming from day one.",
-    name: "Anika Sharma",
-    context: "Prenatal Yoga · 1st Trimester",
-    stars: 5,
-  },
+  // {
+  //   quote:
+  //     "The postnatal sessions helped me rediscover my body after birth. I recovered faster and felt genuinely empowered as a new mother.",
+  //   name: "Divya Krishnamurthy",
+  //   context: "Postnatal Recovery",
+  //   stars: 5,
+  // },
+  // {
+  //   quote:
+  //     "I attended the information sessions and they were incredible — evidence-based, compassionate, and exactly what I needed in my first trimester.",
+  //   name: "Meera Joshi",
+  //   context: "Information Sessions",
+  //   stars: 5,
+  // },
+  // {
+  //   quote:
+  //     "The baby-and-me classes were so special. A beautiful way to bond with my little one while taking care of myself in the fourth trimester.",
+  //   name: "Kavya Nair",
+  //   context: "Baby & Me Classes",
+  //   stars: 5,
+  // },
+  // {
+  //   quote:
+  //     "As a first-time mum, I was nervous about prenatal yoga. The instructor made everything feel safe, joyful, and welcoming from day one.",
+  //   name: "Anika Sharma",
+  //   context: "Prenatal Yoga · 1st Trimester",
+  //   stars: 5,
+  // },
 ];
 
-const row2: Review[] = [
-  {
-    quote:
-      "The pelvic floor work in the postnatal classes was life-changing. I wish every new mother knew about these resources.",
-    name: "Ritika Venugopal",
-    context: "Postnatal Recovery",
-    stars: 5,
-  },
-  {
-    quote:
-      "I joined in my third trimester and immediately felt at home. The breathwork alone was worth it for my birth preparation.",
-    name: "Preeti Subramaniam",
-    context: "Prenatal Yoga · 3rd Trimester",
-    stars: 5,
-  },
-  {
-    quote:
-      "Matrushakti Yog is more than a yoga class — it's a community of mothers who truly understand and support each other.",
-    name: "Lakshmi Iyer",
-    context: "Prenatal & Postnatal",
-    stars: 5,
-  },
-  {
-    quote:
-      "The consultants and instructors work together seamlessly. I felt supported by an entire caring team, not just one teacher.",
-    name: "Swati Desai",
-    context: "Holistic Programme",
-    stars: 5,
-  },
-  {
-    quote:
-      "After a difficult first birth, I was anxious about my second pregnancy. These classes gave me back my confidence and peace.",
-    name: "Deepa Menon",
-    context: "Prenatal Yoga",
-    stars: 5,
-  },
-];
+const row2: Review[] = [];
+// [
+//   {
+//     quote:
+//       "The pelvic floor work in the postnatal classes was life-changing. I wish every new mother knew about these resources.",
+//     name: "Ritika Venugopal",
+//     context: "Postnatal Recovery",
+//     stars: 5,
+//   },
+//   {
+//     quote:
+//       "I joined in my third trimester and immediately felt at home. The breathwork alone was worth it for my birth preparation.",
+//     name: "Preeti Subramaniam",
+//     context: "Prenatal Yoga · 3rd Trimester",
+//     stars: 5,
+//   },
+//   {
+//     quote:
+//       "Matrushakti Yog is more than a yoga class — it's a community of mothers who truly understand and support each other.",
+//     name: "Lakshmi Iyer",
+//     context: "Prenatal & Postnatal",
+//     stars: 5,
+//   },
+//   {
+//     quote:
+//       "The consultants and instructors work together seamlessly. I felt supported by an entire caring team, not just one teacher.",
+//     name: "Swati Desai",
+//     context: "Holistic Programme",
+//     stars: 5,
+//   },
+//   {
+//     quote:
+//       "After a difficult first birth, I was anxious about my second pregnancy. These classes gave me back my confidence and peace.",
+//     name: "Deepa Menon",
+//     context: "Prenatal Yoga",
+//     stars: 5,
+//   },
+// ];
 
 function StarRating({ count }: { count: number }) {
   return (
@@ -135,7 +139,10 @@ function ScrollRow({
   const scrollLeft = useRef(0);
 
   const scroll = (dir: "left" | "right") => {
-    scrollRef.current?.scrollBy({ left: dir === "left" ? -320 : 320, behavior: "smooth" });
+    scrollRef.current?.scrollBy({
+      left: dir === "left" ? -320 : 320,
+      behavior: "smooth",
+    });
   };
 
   const onMouseDown = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
@@ -195,7 +202,11 @@ function ScrollRow({
         onMouseLeave={stopDrag}
       >
         {reviews.map((review, i) => (
-          <ReviewCard key={i} review={review} onClick={() => onCardClick(review)} />
+          <ReviewCard
+            key={i}
+            review={review}
+            onClick={() => onCardClick(review)}
+          />
         ))}
       </div>
     </div>
@@ -314,13 +325,17 @@ export function ReviewSection() {
             style={{ maxWidth: "84rem" }}
           >
             {[...row1, ...row2].slice(0, 6).map((review, i) => (
-              <ReviewCard key={i} review={review} onClick={() => setSelected(review)} />
+              <ReviewCard
+                key={i}
+                review={review}
+                onClick={() => setSelected(review)}
+              />
             ))}
           </div>
         ) : (
           <div className="space-y-4">
             <ScrollRow reviews={row1} onCardClick={setSelected} />
-            <ScrollRow reviews={row2} onCardClick={setSelected} />
+            {/* <ScrollRow reviews={row2} onCardClick={setSelected} /> */}
           </div>
         )}
       </SectionReveal>
