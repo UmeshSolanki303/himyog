@@ -4,7 +4,11 @@ import { motion } from "framer-motion";
 import { Mail, Instagram, Facebook } from "lucide-react";
 
 const socialLinks = [
-  { icon: Instagram, label: "Instagram", href: "#" },
+  {
+    icon: Instagram,
+    label: "Instagram",
+    href: "https://www.instagram.com/_matrushakti_yog_/",
+  },
   { icon: Facebook, label: "Facebook", href: "#" },
 ];
 
@@ -12,7 +16,10 @@ export function Footer() {
   return (
     <footer
       className="w-full py-10 sm:py-14"
-      style={{ background: "linear-gradient(160deg, #FEF9F0 0%, #FAF0D8 50%, #F5E8C4 100%)" }}
+      style={{
+        background:
+          "linear-gradient(160deg, #FEF9F0 0%, #FAF0D8 50%, #F5E8C4 100%)",
+      }}
     >
       {/* Rose-maroon accent rule at the top */}
       <div className="h-[2px] w-full bg-gradient-to-r from-transparent via-sage-500/40 to-transparent mb-10 sm:mb-14" />
@@ -66,7 +73,9 @@ export function Footer() {
           transition={{ duration: 0.5, delay: 0.15 }}
           className="mt-10 pt-8 border-t border-charcoal/10 text-center text-charcoal/40 text-xs sm:text-sm"
         >
-          <p>© {new Date().getFullYear()} Matrushakti Yog. All rights reserved.</p>
+          <p>
+            © {new Date().getFullYear()} Matrushakti Yog. All rights reserved.
+          </p>
         </motion.div>
       </div>
     </footer>
