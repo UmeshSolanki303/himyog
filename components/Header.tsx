@@ -17,6 +17,7 @@ const NAV_LINKS = [
   { href: "/prenatal", label: "Prenatal" },
   { href: "/postnatal", label: "Postnatal" },
   { href: "/information-sessions", label: "Information" },
+  { href: "/contact", label: "Contact" },
 ];
 
 function NavLink({
