@@ -3,10 +3,12 @@
 @tailwind utilities;
 
 :root {
-  --sage: 122 139 98;
-  --beige: 245 243 239;
-  --peach: 252 238 233;
-  --charcoal: 61 66 72;
+  --sage: 184 64 112;       /* rose-maroon (sage-500 #B84070) */
+  --beige: 250 245 239;
+  --peach: 248 212 180;     /* warm peach (peach-200 #F8D4B4) */
+  --charcoal: 61 40 48;     /* warm charcoal (#3D2830) */
+  --warm-sage: 86 126 64;   /* leaf green (warm-sage-400 #567E40) */
+  --gold: 212 164 40;       /* gold (gold-400 #D4A428) */
 }
 
 html {
@@ -33,4 +35,61 @@ body {
   html {
     scroll-behavior: auto;
   }
+}
+
+/* Subtle gradient shimmer for hero headline accent — rose/maroon matching logo */
+.text-shimmer {
+  background: linear-gradient(90deg, #7C1440 0%, #B84070 45%, #9C2458 60%, #CC6090 75%, #7C1440 100%);
+  background-size: 250% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .text-shimmer {
+    animation: text-shimmer 7s ease-in-out infinite;
+  }
+
+  @keyframes text-shimmer {
+    0%, 100% { background-position: 0% center; }
+    50% { background-position: 100% center; }
+  }
+}
+
+/* === Marquee / slow-scroll for review cards === */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+@keyframes marquee-reverse {
+  from { transform: translateX(-50%); }
+  to   { transform: translateX(0); }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .marquee-track {
+    animation: marquee 45s linear infinite;
+    will-change: transform;
+  }
+
+  .marquee-track-reverse {
+    animation: marquee-reverse 45s linear infinite;
+    will-change: transform;
+  }
+
+  .marquee-container:hover .marquee-track,
+  .marquee-container:hover .marquee-track-reverse {
+    animation-play-state: paused;
+  }
+}
+
+/* === Scrollbar hide utility === */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
 }

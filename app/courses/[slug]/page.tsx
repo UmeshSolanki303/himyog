@@ -3,7 +3,9 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, Clock, Monitor, Users, CheckCircle2, BookOpen } from "lucide-react";
 import { courses, getCourseBySlug } from "@/lib/courses";
+import { CtaButton } from "@/components/CtaButton";
 import { Footer } from "@/components/Footer";
+import { MobileEnrollBar } from "@/components/MobileEnrollBar";
 
 interface Props {
   params: { slug: string };
@@ -27,7 +29,7 @@ export default function CourseDetailPage({ params }: Props) {
   if (!course) notFound();
 
   return (
-    <main>
+    <main className="pb-20 lg:pb-0">
       {/* Hero */}
       <section className="relative min-h-[50vh] flex items-end w-full overflow-hidden">
         <div
@@ -172,14 +174,15 @@ export default function CourseDetailPage({ params }: Props) {
                 ))}
               </ul>
 
-              <a
+              <CtaButton
                 href={course.formUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-full inline-flex items-center justify-center text-base font-semibold text-white bg-sage-500 hover:bg-sage-600 rounded-2xl px-6 py-3.5 transition-colors shadow-sm"
+                wrapperClassName="w-full rounded-2xl"
               >
                 Enroll Now — Open Form
-              </a>
+              </CtaButton>
               <p className="text-xs text-slate-soft text-center">
                 Enrollment form opens in a new tab
               </p>
@@ -199,6 +202,7 @@ export default function CourseDetailPage({ params }: Props) {
       </section>
 
       <Footer />
+      <MobileEnrollBar title={course.title} price={course.price} formUrl={course.formUrl} />
     </main>
   );
 }

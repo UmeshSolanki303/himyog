@@ -66,7 +66,7 @@ const POSTNATAL_GALLERY_ITEMS = [
 
 export default function PostnatalPage() {
   return (
-    <main className="pb-12 sm:pb-16 lg:pb-20">
+    <main>
       <PageHero
         title="Postnatal Yoga"
         description="Recover gently and rebuild strength after birth. Pelvic floor and core recovery, with optional baby-and-me sessions so you can bond while you move."

@@ -1,8 +1,10 @@
 import { Hero } from "@/components/Hero";
 import { CardsSection } from "@/components/CardsSection";
 import { Benefits } from "@/components/Benefits";
+import { TeamSection } from "@/components/TeamSection";
 import { ClassSection } from "@/components/ClassSection";
 import { CoursesSection } from "@/components/CoursesSection";
+import { ReviewSection } from "@/components/ReviewSection";
 import { Footer } from "@/components/Footer";
 
 // Placeholder URLs — replace with your Google Form links when ready
@@ -18,6 +20,7 @@ export default function Home() {
       <CardsSection />
       <Benefits />
       <CoursesSection />
+      <TeamSection />
       <ClassSection
         id="prenatal"
         title="Prenatal Yoga"
@@ -52,6 +55,7 @@ export default function Home() {
         formLabel="Register for Postnatal Classes"
         ctaText="Opens in a new tab"
       />
+      <ReviewSection />
       <Footer />
     </main>
   );

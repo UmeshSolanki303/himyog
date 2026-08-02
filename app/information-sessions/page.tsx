@@ -65,7 +65,7 @@ const INFO_GALLERY_ITEMS = [
 
 export default function InformationSessionsPage() {
   return (
-    <main className="pb-12 sm:pb-16 lg:pb-20">
+    <main>
       <PageHero
         title="Information Sessions"
         description="Expert-led sessions on pregnancy, birth, and postpartum. Get tips, guidance, and support for every stage of your journey."

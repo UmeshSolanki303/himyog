@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight, Clock, Monitor } from "lucide-react";
 import { courses } from "@/lib/courses";
+import { CtaButton } from "@/components/CtaButton";
 import { Footer } from "@/components/Footer";
 import { PageHero } from "@/components/PageHero";
 
@@ -19,7 +20,7 @@ export default function CoursesPage() {
         description="Structured programs designed to support you through every stage of pregnancy, birth, and the fourth trimester."
       />
 
-      <section className="py-12 sm:py-20 md:py-24 bg-white w-full">
+      <section className="py-12 sm:py-20 md:py-24 bg-beige-50 w-full">
         <div className="mx-auto px-4 sm:px-6" style={{ maxWidth: "84rem" }}>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {courses.map((course) => (
@@ -90,14 +91,15 @@ export default function CoursesPage() {
                       Course Details
                       <ArrowRight className="w-4 h-4 shrink-0" />
                     </Link>
-                    <a
+                    <CtaButton
                       href={course.formUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex-1 inline-flex items-center justify-center text-sm font-medium text-white bg-sage-500 hover:bg-sage-600 rounded-xl px-4 py-2.5 transition-colors"
+                      className="w-full inline-flex items-center justify-center text-sm font-medium text-white bg-sage-500 hover:bg-sage-600 rounded-xl px-4 py-2.5 transition-colors"
+                      wrapperClassName="flex-1 rounded-xl"
                     >
                       Enroll Now
-                    </a>
+                    </CtaButton>
                   </div>
                 </div>
               </div>
