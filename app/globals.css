@@ -57,6 +57,17 @@ body {
   }
 }
 
+/* === Slow rotation for gradient border rings === */
+@keyframes spin-slow {
+  to { transform: rotate(360deg); }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .animate-spin-slow {
+    animation: spin-slow 9s linear infinite;
+  }
+}
+
 /* === Marquee / slow-scroll for review cards === */
 @keyframes marquee {
   from { transform: translateX(0); }

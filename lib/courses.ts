@@ -112,6 +112,38 @@ export const courses: Course[] = [
     formUrl: ENROLL_FORM_URL,
     price: "Contact for pricing",
   },
+  {
+    slug: "ttc-course",
+    title: "Yoga Teacher Training (TTC)",
+    subtitle: "Become a certified prenatal & postnatal yoga teacher",
+    duration: "200-hour program",
+    format: "Live Online & In-Person",
+    level: "Intermediate practitioners",
+    badge: "Limited Seats",
+    image:
+      "https://images.unsplash.com/photo-1508672019048-805c876b67e2?w=800&q=80",
+    shortDescription:
+      "A comprehensive 200-hour Teacher Training Course specialising in prenatal and postnatal yoga — equipping you to guide mothers safely through every stage of their journey.",
+    description:
+      "Our 200-hour Yoga Teacher Training Course is designed for practitioners who want to specialise in the transformative field of maternal yoga. You will gain deep theoretical knowledge, hands-on teaching practice, and the confidence to hold safe, nurturing spaces for expecting and new mothers. The programme blends classical yoga philosophy with modern evidence-based prenatal and postnatal science.",
+    highlights: [
+      "200-hour Yoga Alliance accredited certification",
+      "Prenatal & postnatal anatomy, physiology and contraindications",
+      "Trauma-informed and inclusive teaching methodology",
+      "Business skills: building your own maternal yoga practice",
+      "Mentorship and supervised teaching practice hours",
+    ],
+    curriculum: [
+      "Yoga philosophy, ethics, and the science of teaching",
+      "Prenatal anatomy, trimester-by-trimester progressions",
+      "Postnatal recovery, pelvic floor, and diastasis recti",
+      "Breathwork, meditation, and yoga nidra for mothers",
+      "Trauma-informed teaching, inclusivity, and safeguarding",
+      "Practicum: supervised class delivery and peer feedback",
+    ],
+    formUrl: ENROLL_FORM_URL,
+    price: "Contact for pricing",
+  },
 ];
 
 export function getCourseBySlug(slug: string): Course | undefined {

@@ -1,0 +1,14 @@
+[
+  {
+    "id": "admin-1",
+    "username": "admin",
+    "passwordHash": "31a754207f42fa464c256a8d9bed5498f8b8af6a2b179f4c34f4fb35db9c783c",
+    "salt": "43a8d1ced4dcbfb2e900b14cfd2cafa1",
+    "role": "admin",
+    "permissions": [
+      "read",
+      "write"
+    ],
+    "createdAt": "2026-08-06T18:27:13.531Z"
+  }
+]

@@ -1,102 +1,31 @@
 "use client";
 
-import { useState, useRef, useCallback } from "react";
-import { motion, useReducedMotion, AnimatePresence } from "framer-motion";
-import { Star, ChevronLeft, ChevronRight, X } from "lucide-react";
+import { useCallback, useMemo, useRef, useState } from "react";
+import Link from "next/link";
+import {
+  motion,
+  useReducedMotion,
+  AnimatePresence,
+  useMotionValue,
+  useTransform,
+  useSpring,
+} from "framer-motion";
+import { Star, ChevronLeft, ChevronRight, X, ArrowRight, PenLine, Sparkles, MapPin, Quote } from "lucide-react";
 import { SectionReveal } from "./SectionReveal";
+import { WriteReviewModal } from "./WriteReviewModal";
+import { useReviews } from "@/lib/useReviews";
+import { COURSE_META, reviewerLabel, type Review } from "@/lib/reviews-data";
 
-interface Review {
-  quote: string;
-  name: string;
-  context: string;
-  stars: number;
-}
-
-const row1: Review[] = [
-  {
-    quote: `To Himani Ma'am 🙏
-I just wanted to take a moment to express my deepest gratitude to you. You have been truly incredible, and in ways you may not even realize, you have helped me grow and heal during a time when I needed it the most.Your guidance, calm presence, and positive energy have brought so much peace and strength into my life. Even without knowing everything I was going through, you made a difference that I will always carry with me.
-I also humbly seek your blessings for something very important in my life. Your blessings mean a lot to me, and I truly believe in your positive energy.
-Thank you once again for being such a beautiful soul and an inspiring teacher.
-With heartfelt gratitude,`,
-    name: "Himakshi Vyas",
-    context: "Prenatal-Postnatal TTC",
-    stars: 5,
-  },
-  // {
-  //   quote:
-  //     "The postnatal sessions helped me rediscover my body after birth. I recovered faster and felt genuinely empowered as a new mother.",
-  //   name: "Divya Krishnamurthy",
-  //   context: "Postnatal Recovery",
-  //   stars: 5,
-  // },
-  // {
-  //   quote:
-  //     "I attended the information sessions and they were incredible — evidence-based, compassionate, and exactly what I needed in my first trimester.",
-  //   name: "Meera Joshi",
-  //   context: "Information Sessions",
-  //   stars: 5,
-  // },
-  // {
-  //   quote:
-  //     "The baby-and-me classes were so special. A beautiful way to bond with my little one while taking care of myself in the fourth trimester.",
-  //   name: "Kavya Nair",
-  //   context: "Baby & Me Classes",
-  //   stars: 5,
-  // },
-  // {
-  //   quote:
-  //     "As a first-time mum, I was nervous about prenatal yoga. The instructor made everything feel safe, joyful, and welcoming from day one.",
-  //   name: "Anika Sharma",
-  //   context: "Prenatal Yoga · 1st Trimester",
-  //   stars: 5,
-  // },
-];
-
-const row2: Review[] = [];
-// [
-//   {
-//     quote:
-//       "The pelvic floor work in the postnatal classes was life-changing. I wish every new mother knew about these resources.",
-//     name: "Ritika Venugopal",
-//     context: "Postnatal Recovery",
-//     stars: 5,
-//   },
-//   {
-//     quote:
-//       "I joined in my third trimester and immediately felt at home. The breathwork alone was worth it for my birth preparation.",
-//     name: "Preeti Subramaniam",
-//     context: "Prenatal Yoga · 3rd Trimester",
-//     stars: 5,
-//   },
-//   {
-//     quote:
-//       "Matrushakti Yog is more than a yoga class — it's a community of mothers who truly understand and support each other.",
-//     name: "Lakshmi Iyer",
-//     context: "Prenatal & Postnatal",
-//     stars: 5,
-//   },
-//   {
-//     quote:
-//       "The consultants and instructors work together seamlessly. I felt supported by an entire caring team, not just one teacher.",
-//     name: "Swati Desai",
-//     context: "Holistic Programme",
-//     stars: 5,
-//   },
-//   {
-//     quote:
-//       "After a difficult first birth, I was anxious about my second pregnancy. These classes gave me back my confidence and peace.",
-//     name: "Deepa Menon",
-//     context: "Prenatal Yoga",
-//     stars: 5,
-//   },
-// ];
+const HOMEPAGE_REVIEW_COUNT = 8;
 
 function StarRating({ count }: { count: number }) {
   return (
     <div className="flex gap-0.5">
-      {Array.from({ length: count }).map((_, i) => (
-        <Star key={i} className="w-4 h-4 fill-gold-400 text-gold-400" />
+      {Array.from({ length: 5 }).map((_, i) => (
+        <Star
+          key={i}
+          className={`w-4 h-4 ${i < count ? "fill-gold-400 text-gold-400" : "fill-beige-200 text-beige-200"}`}
+        />
       ))}
     </div>
   );
@@ -109,19 +38,36 @@ function ReviewCard({
   review: Review;
   onClick: () => void;
 }) {
+  const meta = COURSE_META[review.courseSlug];
+  const label = reviewerLabel(review.courseSlug);
+
   return (
     <button
       onClick={onClick}
-      className="flex-shrink-0 w-72 sm:w-80 rounded-2xl bg-white p-5 sm:p-6 border border-sage-100 shadow-soft mx-2 text-left hover:shadow-soft-lg hover:border-sage-200 hover:-translate-y-0.5 transition-all duration-200 cursor-pointer"
+      className="flex-shrink-0 w-72 sm:w-80 rounded-2xl bg-white p-5 sm:p-6 border border-sage-100 shadow-soft mx-2 text-left hover:shadow-soft-lg hover:border-sage-200 hover:-translate-y-0.5 transition-all duration-200 cursor-pointer flex flex-col"
     >
-      <StarRating count={review.stars} />
-      <p className="mt-3 text-charcoal-light text-sm leading-relaxed italic line-clamp-4">
-        &ldquo;{review.quote}&rdquo;
-      </p>
-      <div className="mt-4 pt-3 border-t border-beige-200/80">
-        <p className="font-medium text-charcoal text-sm">{review.name}</p>
-        <p className="text-slate-muted text-xs mt-0.5">{review.context}</p>
+      <div className="flex items-start justify-between gap-3">
+        <div className="flex items-center gap-2.5 min-w-0">
+          <div className="shrink-0 w-9 h-9 rounded-full bg-gradient-to-br from-sage-200 via-sage-400 to-sage-600 flex items-center justify-center">
+            <span className="text-white text-xs font-serif font-semibold select-none">
+              {review.initials}
+            </span>
+          </div>
+          <div className="min-w-0">
+            <p className="font-medium text-charcoal text-sm leading-tight truncate">{review.name}</p>
+            <p className="text-slate-soft text-[11px] mt-0.5">{label} · {review.city}</p>
+          </div>
+        </div>
+        <span className={`shrink-0 text-[10px] font-semibold px-2 py-1 rounded-full ${meta.badge}`}>
+          {meta.title}
+        </span>
       </div>
+
+      <StarRating count={review.rating} />
+
+      <p className="mt-3 text-charcoal-light text-sm leading-relaxed italic line-clamp-4 flex-1">
+        &ldquo;{review.text}&rdquo;
+      </p>
     </button>
   );
 }
@@ -201,9 +147,9 @@ function ScrollRow({
         onMouseUp={stopDrag}
         onMouseLeave={stopDrag}
       >
-        {reviews.map((review, i) => (
+        {reviews.map((review) => (
           <ReviewCard
-            key={i}
+            key={review.id}
             review={review}
             onClick={() => onCardClick(review)}
           />
@@ -213,13 +159,16 @@ function ScrollRow({
   );
 }
 
-function ReviewModal({
+function ReviewDetailModal({
   review,
   onClose,
 }: {
   review: Review;
   onClose: () => void;
 }) {
+  const label = reviewerLabel(review.courseSlug);
+  const meta = COURSE_META[review.courseSlug];
+
   return (
     <motion.div
       className="fixed inset-0 z-50 flex items-center justify-center p-4"
@@ -234,7 +183,7 @@ function ReviewModal({
 
       {/* Card */}
       <motion.div
-        className="relative bg-white rounded-3xl p-8 max-w-md w-full shadow-soft-lg"
+        className="relative bg-white rounded-3xl p-8 max-w-md w-full max-h-[85vh] overflow-y-auto shadow-soft-lg"
         initial={{ scale: 0.92, y: 24, opacity: 0 }}
         animate={{ scale: 1, y: 0, opacity: 1 }}
         exit={{ scale: 0.92, y: 24, opacity: 0 }}
@@ -250,22 +199,188 @@ function ReviewModal({
           <X className="w-4 h-4" />
         </button>
 
-        <StarRating count={review.stars} />
+        <span className={`inline-block text-[10px] font-semibold px-2.5 py-1 rounded-full ${meta.badge}`}>
+          {meta.title}
+        </span>
 
-        <p className="mt-5 text-charcoal-light text-base sm:text-lg leading-relaxed italic">
-          &ldquo;{review.quote}&rdquo;
+        <div className="mt-3">
+          <StarRating count={review.rating} />
+        </div>
+
+        <p className="mt-5 text-charcoal-light text-base sm:text-lg leading-relaxed italic whitespace-pre-line">
+          &ldquo;{review.text}&rdquo;
         </p>
 
         <div className="mt-6 pt-5 border-t border-beige-200 flex items-center gap-3">
           {/* Avatar initial */}
           <div className="w-10 h-10 rounded-full bg-gradient-to-br from-sage-100 to-sage-200 flex items-center justify-center shrink-0">
             <span className="font-serif text-sage-700 font-semibold text-sm">
-              {review.name.charAt(0)}
+              {review.initials}
             </span>
           </div>
           <div>
             <p className="font-semibold text-charcoal text-sm">{review.name}</p>
-            <p className="text-slate-muted text-xs mt-0.5">{review.context}</p>
+            <div className="flex items-center gap-1 text-slate-muted text-xs mt-0.5">
+              <MapPin className="w-3 h-3 shrink-0" />
+              <span>{review.city}, {review.state} · {label}</span>
+            </div>
+          </div>
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+}
+
+// ─── Write-a-review widget ──────────────────────────────────────────────────
+const WIDGET_TILT_RANGE = 7;
+
+function WriteReviewWidget({ onOpen, reviews }: { onOpen: () => void; reviews: Review[] }) {
+  const shouldReduce = useReducedMotion();
+  const cardRef = useRef<HTMLDivElement>(null);
+
+  // Pointer-driven 3D tilt — subtle, spring-smoothed, disabled for reduced motion.
+  const pointerX = useMotionValue(0.5);
+  const pointerY = useMotionValue(0.5);
+  const springCfg = { stiffness: 150, damping: 18, mass: 0.4 };
+  const rotateX = useSpring(useTransform(pointerY, [0, 1], [WIDGET_TILT_RANGE, -WIDGET_TILT_RANGE]), springCfg);
+  const rotateY = useSpring(useTransform(pointerX, [0, 1], [-WIDGET_TILT_RANGE, WIDGET_TILT_RANGE]), springCfg);
+  const glowX = useTransform(pointerX, [0, 1], ["0%", "100%"]);
+  const glowY = useTransform(pointerY, [0, 1], ["0%", "100%"]);
+
+  const handlePointerMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (shouldReduce) return;
+    const rect = cardRef.current?.getBoundingClientRect();
+    if (!rect) return;
+    pointerX.set((e.clientX - rect.left) / rect.width);
+    pointerY.set((e.clientY - rect.top) / rect.height);
+  };
+
+  const resetPointer = () => {
+    pointerX.set(0.5);
+    pointerY.set(0.5);
+  };
+
+  const spotlight = useTransform(
+    [glowX, glowY],
+    ([x, y]) => `radial-gradient(320px circle at ${x} ${y}, rgba(255,255,255,0.5), transparent 70%)`,
+  );
+
+  const avatarSample = reviews.slice(0, 4);
+  const communitySize = reviews.length;
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-60px" }}
+      transition={{ duration: 0.55, ease: [0.25, 0.46, 0.45, 0.94] }}
+      style={{ perspective: 1200 }}
+      className="relative"
+    >
+      {/* Rotating conic-gradient border ring */}
+      {!shouldReduce && (
+        <div className="absolute inset-0 rounded-[2rem] overflow-hidden" aria-hidden>
+          <div className="absolute -inset-[60%] animate-spin-slow bg-[conic-gradient(from_0deg,#CB6490_0%,#D4A428_25%,#F0B488_50%,#88BA70_75%,#CB6490_100%)] opacity-70" />
+        </div>
+      )}
+
+      <motion.div
+        ref={cardRef}
+        onMouseMove={handlePointerMove}
+        onMouseLeave={resetPointer}
+        style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
+        className="relative m-[2px] overflow-hidden rounded-[calc(2rem-2px)] border border-sage-200/60 bg-gradient-to-br from-white via-sage-50/70 to-gold-50/50 p-6 sm:p-9 shadow-soft-lg"
+      >
+        {/* Pointer spotlight */}
+        {!shouldReduce && (
+          <motion.div
+            className="pointer-events-none absolute inset-0 mix-blend-overlay"
+            style={{ background: spotlight }}
+            aria-hidden
+          />
+        )}
+
+        {/* Giant decorative quote mark */}
+        <Quote
+          className="pointer-events-none absolute -top-4 right-4 sm:right-8 w-24 h-24 sm:w-32 sm:h-32 text-sage-900/[0.05] rotate-6"
+          strokeWidth={0.5}
+          fill="currentColor"
+          aria-hidden
+        />
+
+        <div className="relative flex flex-col sm:flex-row items-center sm:items-center gap-6 sm:gap-10">
+          <div className="flex-1 text-center sm:text-left">
+            <div className="inline-flex items-center gap-1.5 text-gold-600 text-xs font-semibold uppercase tracking-[0.14em]">
+              {!shouldReduce ? (
+                <motion.span
+                  animate={{ rotate: [0, 15, -10, 0] }}
+                  transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
+                  className="inline-flex"
+                >
+                  <Sparkles className="w-3.5 h-3.5" />
+                </motion.span>
+              ) : (
+                <Sparkles className="w-3.5 h-3.5" />
+              )}
+              Share your journey
+            </div>
+            <h3 className="mt-2 font-serif text-xl sm:text-2xl md:text-[1.75rem] text-charcoal font-medium leading-snug">
+              Been a mother or student{" "}
+              <span className="text-shimmer italic">with us?</span>
+            </h3>
+            <p className="mt-1.5 text-slate-muted text-sm sm:text-base max-w-md">
+              Your story could be the reassurance someone else needs today. It only takes a minute.
+            </p>
+
+            {/* Social proof avatar stack */}
+            {avatarSample.length > 0 && (
+              <div className="mt-4 flex items-center justify-center sm:justify-start gap-3">
+                <div className="flex -space-x-2.5">
+                  {avatarSample.map((r) => (
+                    <div
+                      key={r.id}
+                      className="w-8 h-8 rounded-full bg-gradient-to-br from-sage-200 via-sage-400 to-sage-600 border-2 border-white flex items-center justify-center shadow-sm"
+                      title={r.name}
+                    >
+                      <span className="text-white text-[10px] font-serif font-semibold select-none">
+                        {r.initials}
+                      </span>
+                    </div>
+                  ))}
+                  {communitySize > avatarSample.length && (
+                    <div className="w-8 h-8 rounded-full bg-beige-200 border-2 border-white flex items-center justify-center shadow-sm">
+                      <span className="text-charcoal text-[10px] font-semibold select-none">
+                        +{communitySize - avatarSample.length}
+                      </span>
+                    </div>
+                  )}
+                </div>
+                <span className="text-xs text-slate-soft">
+                  {communitySize}+ stories shared so far
+                </span>
+              </div>
+            )}
+          </div>
+
+          <div className="relative shrink-0" style={{ transform: "translateZ(40px)" }}>
+            {!shouldReduce && (
+              <motion.span
+                className="absolute inset-0 rounded-2xl bg-sage-400/40"
+                animate={{ scale: [1, 1.2, 1], opacity: [0.6, 0, 0.6] }}
+                transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
+                aria-hidden
+              />
+            )}
+            <motion.button
+              onClick={onOpen}
+              whileHover={shouldReduce ? {} : { scale: 1.04, y: -2 }}
+              whileTap={shouldReduce ? {} : { scale: 0.96 }}
+              className="group relative inline-flex items-center gap-2 rounded-2xl bg-sage-600 hover:bg-sage-700 text-white px-6 py-3.5 text-sm font-semibold shadow-soft-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-sage-400 focus:ring-offset-2"
+            >
+              <PenLine className="w-4 h-4 shrink-0 transition-transform duration-200 group-hover:-rotate-12" />
+              Write a Review
+              <ArrowRight className="w-4 h-4 shrink-0 -mr-1 transition-transform duration-200 group-hover:translate-x-1" />
+            </motion.button>
           </div>
         </div>
       </motion.div>
@@ -275,7 +390,18 @@ function ReviewModal({
 
 export function ReviewSection() {
   const shouldReduce = useReducedMotion();
+  const { reviews, addReview } = useReviews();
   const [selected, setSelected] = useState<Review | null>(null);
+  const [writeOpen, setWriteOpen] = useState(false);
+
+  const featured = useMemo(() => {
+    return [...reviews]
+      .sort((a, b) => {
+        if (b.rating !== a.rating) return b.rating - a.rating;
+        return new Date(b.date).getTime() - new Date(a.date).getTime();
+      })
+      .slice(0, HOMEPAGE_REVIEW_COUNT);
+  }, [reviews]);
 
   return (
     <>
@@ -305,11 +431,11 @@ export function ReviewSection() {
               <span className="h-[1.5px] w-8 bg-gradient-to-l from-transparent to-sage-300" />
             </div>
             <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-charcoal font-medium">
-              What Mothers Say
+              What Our Students Say
             </h2>
             <p className="mt-3 sm:mt-4 text-slate-muted text-base sm:text-lg max-w-2xl mx-auto">
-              Stories from mothers who found strength, calm, and community with
-              us.
+              Stories from the mothers and students who found strength, calm, and
+              community with us.
             </p>
             <p className="mt-2 text-slate-muted/70 text-xs sm:text-sm">
               Drag to scroll · Click any card to read in full
@@ -318,34 +444,62 @@ export function ReviewSection() {
         </div>
 
         {/* Rows */}
-        {shouldReduce ? (
-          /* Static grid for reduced-motion */
-          <div
-            className="mx-auto px-4 sm:px-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"
-            style={{ maxWidth: "84rem" }}
-          >
-            {[...row1, ...row2].slice(0, 6).map((review, i) => (
-              <ReviewCard
-                key={i}
-                review={review}
-                onClick={() => setSelected(review)}
-              />
-            ))}
-          </div>
-        ) : (
-          <div className="space-y-4">
-            <ScrollRow reviews={row1} onCardClick={setSelected} />
-            {/* <ScrollRow reviews={row2} onCardClick={setSelected} /> */}
-          </div>
+        {featured.length > 0 && (
+          shouldReduce ? (
+            /* Static grid for reduced-motion */
+            <div
+              className="mx-auto px-4 sm:px-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"
+              style={{ maxWidth: "84rem" }}
+            >
+              {featured.slice(0, 6).map((review) => (
+                <ReviewCard
+                  key={review.id}
+                  review={review}
+                  onClick={() => setSelected(review)}
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="space-y-4">
+              <ScrollRow reviews={featured} onCardClick={setSelected} />
+            </div>
+          )
         )}
+
+        {/* CTAs: view all + write review widget */}
+        <div
+          className="mx-auto px-4 sm:px-6 mt-10 sm:mt-14 flex flex-col gap-6"
+          style={{ maxWidth: "84rem" }}
+        >
+          <div className="flex justify-center">
+            <Link
+              href="/reviews"
+              className="group inline-flex items-center gap-2 rounded-2xl bg-white border border-sage-200 text-sage-700 px-6 py-3 text-sm font-semibold shadow-soft hover:bg-sage-50 hover:border-sage-300 transition-all duration-200"
+            >
+              View All Reviews
+              <ArrowRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-0.5" />
+            </Link>
+          </div>
+
+          <WriteReviewWidget onOpen={() => setWriteOpen(true)} reviews={featured} />
+        </div>
       </SectionReveal>
 
       {/* Popup */}
       <AnimatePresence>
         {selected && (
-          <ReviewModal review={selected} onClose={() => setSelected(null)} />
+          <ReviewDetailModal review={selected} onClose={() => setSelected(null)} />
         )}
       </AnimatePresence>
+
+      {/* Write review modal */}
+      <WriteReviewModal
+        open={writeOpen}
+        onClose={() => setWriteOpen(false)}
+        onSubmitted={(review) => {
+          addReview(review);
+        }}
+      />
     </>
   );
 }

@@ -16,7 +16,9 @@ const NAV_LINKS = [
   { href: "/courses", label: "Courses" },
   { href: "/prenatal", label: "Prenatal" },
   { href: "/postnatal", label: "Postnatal" },
+  { href: "/courses/ttc-course", label: "TTC" },
   { href: "/information-sessions", label: "Information" },
+  { href: "/reviews", label: "Reviews" },
   { href: "/contact", label: "Contact" },
 ];
 
@@ -128,7 +130,9 @@ export function Header() {
   // Prevent body scroll when mobile menu open
   useEffect(() => {
     document.body.style.overflow = mobileOpen ? "hidden" : "";
-    return () => { document.body.style.overflow = ""; };
+    return () => {
+      document.body.style.overflow = "";
+    };
   }, [mobileOpen]);
 
   return (
