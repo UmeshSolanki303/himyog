@@ -14,7 +14,7 @@ import { Star, ChevronLeft, ChevronRight, X, ArrowRight, PenLine, Sparkles, MapP
 import { SectionReveal } from "./SectionReveal";
 import { WriteReviewModal } from "./WriteReviewModal";
 import { useReviews } from "@/lib/useReviews";
-import { COURSE_META, reviewerLabel, type Review } from "@/lib/reviews-data";
+import { COURSE_META, reviewerLabel, formatLocation, type Review } from "@/lib/reviews-data";
 
 const HOMEPAGE_REVIEW_COUNT = 8;
 
@@ -55,7 +55,7 @@ function ReviewCard({
           </div>
           <div className="min-w-0">
             <p className="font-medium text-charcoal text-sm leading-tight truncate">{review.name}</p>
-            <p className="text-slate-soft text-[11px] mt-0.5">{label} · {review.city}</p>
+            <p className="text-slate-soft text-[11px] mt-0.5">{label} · {review.city ?? review.state}</p>
           </div>
         </div>
         <span className={`shrink-0 text-[10px] font-semibold px-2 py-1 rounded-full ${meta.badge}`}>
@@ -222,7 +222,7 @@ function ReviewDetailModal({
             <p className="font-semibold text-charcoal text-sm">{review.name}</p>
             <div className="flex items-center gap-1 text-slate-muted text-xs mt-0.5">
               <MapPin className="w-3 h-3 shrink-0" />
-              <span>{review.city}, {review.state} · {label}</span>
+              <span>{formatLocation(review)} · {label}</span>
             </div>
           </div>
         </div>

@@ -7,14 +7,7 @@ import {
   Star, ChevronDown, X, Save,
 } from "lucide-react";
 import type { AdminReview } from "@/lib/admin-db";
-
-// ─── Constants ────────────────────────────────────────────────────────────────
-const COURSE_OPTIONS = [
-  { slug: "prenatal-yoga",      title: "Prenatal Yoga" },
-  { slug: "postnatal-yoga",     title: "Postnatal Yoga" },
-  { slug: "pregnancy-wellness", title: "Pregnancy Wellness" },
-  { slug: "ttc-course",         title: "Yoga Teacher Training (TTC)" },
-];
+import { COURSE_OPTIONS, formatLocation } from "@/lib/reviews-data";
 
 const STATUS_OPTIONS = ["pending", "approved", "rejected"] as const;
 
@@ -54,14 +47,14 @@ function StarPicker({ value, onChange }: { value: number; onChange: (v: number) 
 
 // ─── Review form (add / edit) ─────────────────────────────────────────────────
 interface FormState {
-  name: string; city: string; state: string;
+  name: string; city: string; state: string; country: string;
   courseSlug: string; rating: number;
   text: string; photo: string; status: string; date: string;
 }
 
 function defaultForm(): FormState {
   return {
-    name: "", city: "", state: "", courseSlug: "", rating: 5,
+    name: "", city: "", state: "", country: "", courseSlug: "", rating: 5,
     text: "", photo: "", status: "approved",
     date: new Date().toISOString().split("T")[0],
   };
@@ -80,7 +73,8 @@ function ReviewModal({
   const [form, setForm] = useState<FormState>(
     review
       ? {
-          name: review.name, city: review.city, state: review.state,
+          name: review.name, city: review.city ?? "", state: review.state,
+          country: review.country ?? "",
           courseSlug: review.courseSlug, rating: review.rating,
           text: review.text, photo: review.photo ?? "",
           status: review.status, date: review.date,
@@ -142,14 +136,18 @@ function ReviewModal({
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-3 gap-3">
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-wide text-sage-600 mb-1.5">City *</label>
-              <input name="city" value={form.city} onChange={handle} required className={inputCls} placeholder="Mumbai" />
+              <label className="block text-xs font-semibold uppercase tracking-wide text-sage-600 mb-1.5">City</label>
+              <input name="city" value={form.city} onChange={handle} className={inputCls} placeholder="Mumbai (optional)" />
             </div>
             <div>
               <label className="block text-xs font-semibold uppercase tracking-wide text-sage-600 mb-1.5">State *</label>
               <input name="state" value={form.state} onChange={handle} required className={inputCls} placeholder="Maharashtra" />
+            </div>
+            <div>
+              <label className="block text-xs font-semibold uppercase tracking-wide text-sage-600 mb-1.5">Country *</label>
+              <input name="country" value={form.country} onChange={handle} required className={inputCls} placeholder="India" />
             </div>
           </div>
 
@@ -370,7 +368,7 @@ function ReviewsPageInner() {
                         </div>
                         <div className="min-w-0">
                           <p className="font-medium text-charcoal truncate max-w-[120px]">{r.name}</p>
-                          <p className="text-xs text-slate-soft truncate">{r.city}, {r.state}</p>
+                          <p className="text-xs text-slate-soft truncate">{formatLocation(r)}</p>
                         </div>
                       </div>
                     </td>

@@ -9,7 +9,7 @@ import { PageHero } from "@/components/PageHero";
 export const metadata: Metadata = {
   title: "Courses",
   description:
-    "Explore our prenatal yoga, postnatal yoga, and pregnancy wellness courses. Structured programs to support every stage of your motherhood journey.",
+    "Explore our Preconception, Prenatal, Garbhsamskar, Postnatal, Pregnancy Wellness Retreat, TTC Yoga, and Meditation courses. Structured programs to support every stage of your journey.",
 };
 
 export default function CoursesPage() {

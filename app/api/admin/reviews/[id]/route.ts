@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSessionFromRequest, requirePermission } from "@/lib/admin-auth";
-import { readReviews, writeReviews } from "@/lib/admin-db";
+import { findReviewById, updateReview, deleteReview, type AdminReview } from "@/lib/admin-db";
 
 // PUT — update a review
 export async function PUT(
@@ -14,26 +14,25 @@ export async function PUT(
 
   const { id } = await params;
   const body = await request.json();
-  const reviews = await readReviews();
-  const idx = reviews.findIndex((r) => r.id === id);
+  const existing = await findReviewById(id);
 
-  if (idx === -1) {
+  if (!existing) {
     return NextResponse.json({ error: "Review not found" }, { status: 404 });
   }
 
-  reviews[idx] = {
-    ...reviews[idx],
-    name: body.name ?? reviews[idx].name,
-    city: body.city ?? reviews[idx].city,
-    state: body.state ?? reviews[idx].state,
-    courseSlug: body.courseSlug ?? reviews[idx].courseSlug,
-    courseTitle: body.courseTitle ?? reviews[idx].courseTitle,
-    rating: body.rating != null ? Math.min(5, Math.max(1, Number(body.rating))) : reviews[idx].rating,
-    text: body.text ?? reviews[idx].text,
-    photo: body.photo !== undefined ? body.photo || undefined : reviews[idx].photo,
-    status: body.status ?? reviews[idx].status,
-    date: body.date ?? reviews[idx].date,
-    initials: (body.name ?? reviews[idx].name)
+  const patch: Partial<AdminReview> = {
+    name: body.name ?? existing.name,
+    city: body.city !== undefined ? body.city || undefined : existing.city,
+    state: body.state ?? existing.state,
+    country: body.country ?? existing.country,
+    courseSlug: body.courseSlug ?? existing.courseSlug,
+    courseTitle: body.courseTitle ?? existing.courseTitle,
+    rating: body.rating != null ? Math.min(5, Math.max(1, Number(body.rating))) : existing.rating,
+    text: body.text ?? existing.text,
+    photo: body.photo !== undefined ? body.photo || undefined : existing.photo,
+    status: body.status ?? existing.status,
+    date: body.date ?? existing.date,
+    initials: (body.name ?? existing.name)
       .split(" ")
       .map((w: string) => w[0])
       .join("")
@@ -41,8 +40,8 @@ export async function PUT(
       .toUpperCase(),
   };
 
-  await writeReviews(reviews);
-  return NextResponse.json(reviews[idx]);
+  const updated = await updateReview(id, patch);
+  return NextResponse.json(updated);
 }
 
 // DELETE — remove a review
@@ -56,13 +55,11 @@ export async function DELETE(
   }
 
   const { id } = await params;
-  const reviews = await readReviews();
-  const next = reviews.filter((r) => r.id !== id);
+  const deleted = await deleteReview(id);
 
-  if (next.length === reviews.length) {
+  if (!deleted) {
     return NextResponse.json({ error: "Review not found" }, { status: 404 });
   }
 
-  await writeReviews(next);
   return NextResponse.json({ success: true });
 }

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSessionFromRequest, requireAdmin, createSalt, hashPassword } from "@/lib/admin-auth";
-import { readUsers, writeUsers, type AdminUser } from "@/lib/admin-db";
+import { listUsers, insertUser, updateUser, deleteUser, findUserById, isUsernameTaken, type AdminUser } from "@/lib/admin-db";
 import crypto from "crypto";
 
 // GET — list all users (admin only)
@@ -10,7 +10,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 
-  const users = await readUsers();
+  const users = await listUsers();
   return NextResponse.json(
     users.map(({ passwordHash: _, salt: __, ...u }) => u) // strip secrets
   );
@@ -29,8 +29,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "username, password and role are required" }, { status: 400 });
   }
 
-  const users = await readUsers();
-  if (users.some((u) => u.username === username)) {
+  if (await isUsernameTaken(username)) {
     return NextResponse.json({ error: "Username already exists" }, { status: 409 });
   }
 
@@ -45,8 +44,7 @@ export async function POST(request: NextRequest) {
     createdAt: new Date().toISOString(),
   };
 
-  users.push(newUser);
-  await writeUsers(users);
+  await insertUser(newUser);
 
   const { passwordHash: _, salt: __, ...safe } = newUser;
   return NextResponse.json(safe, { status: 201 });
@@ -62,26 +60,26 @@ export async function PUT(request: NextRequest) {
   const { id, username, password, role, permissions } = await request.json();
   if (!id) return NextResponse.json({ error: "id required" }, { status: 400 });
 
-  const users = await readUsers();
-  const idx = users.findIndex((u) => u.id === id);
-  if (idx === -1) return NextResponse.json({ error: "User not found" }, { status: 404 });
+  const existing = await findUserById(id);
+  if (!existing) return NextResponse.json({ error: "User not found" }, { status: 404 });
 
-  if (username && username !== users[idx].username) {
-    if (users.some((u) => u.username === username)) {
+  const patch: Partial<AdminUser> = {};
+  if (username && username !== existing.username) {
+    if (await isUsernameTaken(username, id)) {
       return NextResponse.json({ error: "Username taken" }, { status: 409 });
     }
-    users[idx].username = username;
+    patch.username = username;
   }
   if (password) {
     const salt = createSalt();
-    users[idx].salt = salt;
-    users[idx].passwordHash = hashPassword(password, salt);
+    patch.salt = salt;
+    patch.passwordHash = hashPassword(password, salt);
   }
-  if (role) users[idx].role = role;
-  if (permissions) users[idx].permissions = permissions;
+  if (role) patch.role = role;
+  if (permissions) patch.permissions = permissions;
 
-  await writeUsers(users);
-  const { passwordHash: _, salt: __, ...safe } = users[idx];
+  const updated = await updateUser(id, patch);
+  const { passwordHash: _, salt: __, ...safe } = updated!;
   return NextResponse.json(safe);
 }
 
@@ -96,10 +94,8 @@ export async function DELETE(request: NextRequest) {
   if (!id) return NextResponse.json({ error: "id required" }, { status: 400 });
   if (id === session?.id) return NextResponse.json({ error: "Cannot delete yourself" }, { status: 400 });
 
-  const users = await readUsers();
-  const next = users.filter((u) => u.id !== id);
-  if (next.length === users.length) return NextResponse.json({ error: "User not found" }, { status: 404 });
+  const deleted = await deleteUser(id);
+  if (!deleted) return NextResponse.json({ error: "User not found" }, { status: 404 });
 
-  await writeUsers(next);
   return NextResponse.json({ success: true });
 }

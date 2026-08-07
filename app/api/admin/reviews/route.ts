@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSessionFromRequest, requirePermission } from "@/lib/admin-auth";
-import { readReviews, writeReviews, type AdminReview } from "@/lib/admin-db";
+import { listReviews, insertReview, type AdminReview } from "@/lib/admin-db";
 import crypto from "crypto";
 
 // GET — list all reviews (requires read)
@@ -11,18 +11,10 @@ export async function GET(request: NextRequest) {
   }
 
   const { searchParams } = new URL(request.url);
-  const status = searchParams.get("status");
-  const courseSlug = searchParams.get("course");
+  const status = searchParams.get("status") ?? undefined;
+  const courseSlug = searchParams.get("course") ?? undefined;
 
-  let reviews = await readReviews();
-  if (status) reviews = reviews.filter((r) => r.status === status);
-  if (courseSlug) reviews = reviews.filter((r) => r.courseSlug === courseSlug);
-
-  // Sort newest first
-  reviews = reviews.sort(
-    (a, b) => new Date(b.submittedAt).getTime() - new Date(a.submittedAt).getTime()
-  );
-
+  const reviews = await listReviews({ status, courseSlug });
   return NextResponse.json(reviews);
 }
 
@@ -34,18 +26,18 @@ export async function POST(request: NextRequest) {
   }
 
   const body = await request.json();
-  const { name, city, state, courseSlug, courseTitle, rating, text, photo, status } = body;
+  const { name, city, state, country, courseSlug, courseTitle, rating, text, photo, status } = body;
 
-  if (!name || !city || !state || !courseSlug || !text) {
+  if (!name || !state || !country || !courseSlug || !text) {
     return NextResponse.json({ error: "Required fields missing" }, { status: 400 });
   }
 
-  const reviews = await readReviews();
   const review: AdminReview = {
     id: crypto.randomUUID(),
     name,
-    city,
+    city: city || undefined,
     state,
+    country,
     courseSlug,
     courseTitle: courseTitle ?? courseSlug,
     rating: Math.min(5, Math.max(1, Number(rating) || 5)),
@@ -57,7 +49,6 @@ export async function POST(request: NextRequest) {
     submittedAt: new Date().toISOString(),
   };
 
-  reviews.unshift(review);
-  await writeReviews(reviews);
+  await insertReview(review);
   return NextResponse.json(review, { status: 201 });
 }

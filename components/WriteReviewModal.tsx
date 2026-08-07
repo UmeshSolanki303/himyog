@@ -70,6 +70,7 @@ export function WriteReviewModal({ open, onClose, onSubmitted }: WriteReviewModa
     name: "",
     city: "",
     state: "",
+    country: "",
     courseSlug: "",
     text: "",
   });
@@ -91,7 +92,7 @@ export function WriteReviewModal({ open, onClose, onSubmitted }: WriteReviewModa
         setPhoto(null);
         setPreview(null);
         setError("");
-        setForm({ name: "", city: "", state: "", courseSlug: "", text: "" });
+        setForm({ name: "", city: "", state: "", country: "", courseSlug: "", text: "" });
       }, 300);
     }
   }, [open]);
@@ -127,8 +128,9 @@ export function WriteReviewModal({ open, onClose, onSubmitted }: WriteReviewModa
       COURSE_OPTIONS.find((c) => c.slug === form.courseSlug)?.title ?? form.courseSlug;
     const fd = new FormData();
     fd.append("name", form.name);
-    fd.append("city", form.city);
+    if (form.city) fd.append("city", form.city);
     fd.append("state", form.state);
+    fd.append("country", form.country);
     fd.append("courseSlug", form.courseSlug);
     fd.append("courseTitle", courseTitle);
     fd.append("rating", String(rating));
@@ -143,8 +145,9 @@ export function WriteReviewModal({ open, onClose, onSubmitted }: WriteReviewModa
       const newReview: Review = {
         id: `user-${Date.now()}`,
         name: form.name,
-        city: form.city,
+        city: form.city || undefined,
         state: form.state,
+        country: form.country,
         courseSlug: form.courseSlug as Review["courseSlug"],
         courseTitle,
         rating,
@@ -288,13 +291,12 @@ export function WriteReviewModal({ open, onClose, onSubmitted }: WriteReviewModa
                       {/* City + State */}
                       <div className="grid grid-cols-2 gap-3">
                         <div>
-                          <FieldLabel label="City" required />
+                          <FieldLabel label="City" />
                           <input
                             name="city"
                             value={form.city}
                             onChange={handleChange}
-                            required
-                            placeholder="Mumbai"
+                            placeholder="Mumbai (optional)"
                             className={inputCls}
                           />
                         </div>
@@ -309,6 +311,19 @@ export function WriteReviewModal({ open, onClose, onSubmitted }: WriteReviewModa
                             className={inputCls}
                           />
                         </div>
+                      </div>
+
+                      {/* Country */}
+                      <div>
+                        <FieldLabel label="Country" required />
+                        <input
+                          name="country"
+                          value={form.country}
+                          onChange={handleChange}
+                          required
+                          placeholder="India"
+                          className={inputCls}
+                        />
                       </div>
 
                       {/* Course */}

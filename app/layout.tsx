@@ -1,7 +1,15 @@
 import type { Metadata } from "next";
 import { Playfair_Display, Source_Sans_3 } from "next/font/google";
 import { Header } from "@/components/Header";
+import { courses } from "@/lib/courses";
 import "./globals.css";
+
+// Prenatal/postnatal have dedicated marketing pages; every other course
+// resolves to its generic /courses/[slug] detail page.
+const DEDICATED_COURSE_URLS: Record<string, string> = {
+  "prenatal-yoga": "/prenatal",
+  "postnatal-yoga": "/postnatal",
+};
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
@@ -113,24 +121,14 @@ const jsonLd = {
       publisher: { "@id": `${siteUrl}/#organization` },
       inLanguage: "en-IN",
     },
-    {
+    ...courses.map((course) => ({
       "@type": "Service",
-      "@id": `${siteUrl}/#prenatal`,
-      name: "Prenatal Yoga Classes",
-      description:
-        "Safe prenatal yoga for every trimester. Gentle movement, breathwork, and preparation for birth.",
+      "@id": `${siteUrl}/#${course.slug}`,
+      name: course.title,
+      description: course.shortDescription,
       provider: { "@id": `${siteUrl}/#organization` },
-      url: `${siteUrl}/prenatal`,
-    },
-    {
-      "@type": "Service",
-      "@id": `${siteUrl}/#postnatal`,
-      name: "Postnatal Yoga Classes",
-      description:
-        "Postpartum recovery yoga. Pelvic floor and core recovery, baby-and-me sessions.",
-      provider: { "@id": `${siteUrl}/#organization` },
-      url: `${siteUrl}/postnatal`,
-    },
+      url: `${siteUrl}${DEDICATED_COURSE_URLS[course.slug] ?? `/courses/${course.slug}`}`,
+    })),
     {
       "@type": "Service",
       "@id": `${siteUrl}/#information-sessions`,

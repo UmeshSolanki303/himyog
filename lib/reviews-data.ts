@@ -1,13 +1,17 @@
 export interface Review {
   id: string;
   name: string;
-  city: string;
+  city?: string;
   state: string;
+  country: string;
   courseSlug:
+    | "preconception"
     | "prenatal-yoga"
+    | "garbhsamskar"
     | "postnatal-yoga"
     | "pregnancy-wellness"
-    | "ttc-course";
+    | "ttc-course"
+    | "meditation";
   courseTitle: string;
   rating: number;
   text: string;
@@ -17,7 +21,7 @@ export interface Review {
 }
 
 // Prenatal/postnatal reviewers are addressed as "Mother"; everyone else
-// (wellness attendees, TTC trainees) is addressed as "Student".
+// (preconception, garbhsamskar, wellness, TTC, meditation) is addressed as "Student".
 export function reviewerLabel(
   courseSlug: Review["courseSlug"],
 ): "Mother" | "Student" {
@@ -26,48 +30,75 @@ export function reviewerLabel(
     : "Student";
 }
 
+// Combines city + state + country into a single display string, gracefully
+// dropping city when it wasn't provided.
+export function formatLocation(review: Pick<Review, "city" | "state" | "country">): string {
+  return [review.city, review.state, review.country].filter(Boolean).join(", ");
+}
+
 export const COURSE_OPTIONS: { slug: Review["courseSlug"]; title: string }[] = [
-  { slug: "prenatal-yoga", title: "Prenatal Yoga" },
-  { slug: "postnatal-yoga", title: "Postnatal Yoga" },
-  { slug: "pregnancy-wellness", title: "Pregnancy Wellness" },
-  { slug: "ttc-course", title: "Yoga Teacher Training (TTC)" },
+  { slug: "preconception", title: "Preconception" },
+  { slug: "prenatal-yoga", title: "Prenatal" },
+  { slug: "garbhsamskar", title: "Garbhsamskar" },
+  { slug: "postnatal-yoga", title: "Postnatal" },
+  { slug: "pregnancy-wellness", title: "Pregnancy Wellness Retreat" },
+  { slug: "ttc-course", title: "TTC Yoga" },
+  { slug: "meditation", title: "Meditation" },
 ];
 
 export const COURSES = [
   { slug: "all", label: "All Reviews", short: "All" },
-  { slug: "prenatal-yoga", label: "Prenatal Yoga", short: "Prenatal" },
-  { slug: "postnatal-yoga", label: "Postnatal Yoga", short: "Postnatal" },
+  { slug: "preconception", label: "Preconception", short: "Preconception" },
+  { slug: "prenatal-yoga", label: "Prenatal", short: "Prenatal" },
+  { slug: "garbhsamskar", label: "Garbhsamskar", short: "Garbhsamskar" },
+  { slug: "postnatal-yoga", label: "Postnatal", short: "Postnatal" },
   {
     slug: "pregnancy-wellness",
-    label: "Pregnancy Wellness",
+    label: "Pregnancy Wellness Retreat",
     short: "Wellness",
   },
-  { slug: "ttc-course", label: "Yoga TTC", short: "TTC" },
+  { slug: "ttc-course", label: "TTC Yoga", short: "TTC" },
+  { slug: "meditation", label: "Meditation", short: "Meditation" },
 ];
 
 export const COURSE_META: Record<
   Review["courseSlug"],
   { badge: string; dot: string; title: string }
 > = {
+  preconception: {
+    badge: "bg-gold-50 text-gold-500 border border-gold-100",
+    dot: "bg-gold-300",
+    title: "Preconception",
+  },
   "prenatal-yoga": {
     badge: "bg-sage-100 text-sage-700 border border-sage-200",
     dot: "bg-sage-500",
-    title: "Prenatal Yoga",
+    title: "Prenatal",
+  },
+  garbhsamskar: {
+    badge: "bg-peach-50 text-peach-400 border border-peach-100",
+    dot: "bg-peach-200",
+    title: "Garbhsamskar",
   },
   "postnatal-yoga": {
     badge: "bg-warm-sage-100 text-warm-sage-600 border border-warm-sage-200",
     dot: "bg-warm-sage-400",
-    title: "Postnatal Yoga",
+    title: "Postnatal",
   },
   "pregnancy-wellness": {
     badge: "bg-gold-100 text-gold-600 border border-gold-200",
     dot: "bg-gold-400",
-    title: "Pregnancy Wellness",
+    title: "Pregnancy Wellness Retreat",
   },
   "ttc-course": {
     badge: "bg-peach-100 text-peach-400 border border-peach-300",
     dot: "bg-peach-300",
-    title: "Yoga TTC",
+    title: "TTC Yoga",
+  },
+  meditation: {
+    badge: "bg-sage-50 text-sage-500 border border-sage-100",
+    dot: "bg-sage-300",
+    title: "Meditation",
   },
 };
 

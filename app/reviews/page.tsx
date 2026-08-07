@@ -18,7 +18,7 @@ import {
 import { Footer } from "@/components/Footer";
 import { WriteReviewModal } from "@/components/WriteReviewModal";
 import { useReviews } from "@/lib/useReviews";
-import { COURSES, COURSE_META, reviewerLabel, type Review } from "@/lib/reviews-data";
+import { COURSES, COURSE_META, reviewerLabel, formatLocation, type Review } from "@/lib/reviews-data";
 
 // ─── Star display ─────────────────────────────────────────────────────────────
 function Stars({ rating, size = "sm" }: { rating: number; size?: "sm" | "md" }) {
@@ -120,7 +120,7 @@ function ReviewCard({ review, index }: { review: Review; index: number }) {
               <p className="font-medium text-charcoal text-sm leading-tight">{review.name}</p>
               <div className="flex items-center gap-1 mt-0.5 text-slate-soft text-xs">
                 <MapPin className="w-3 h-3 shrink-0" />
-                <span className="truncate">{review.city}, {review.state}</span>
+                <span className="truncate">{formatLocation(review)}</span>
               </div>
             </div>
             {/* Course badge */}

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { hashPassword, signSession } from "@/lib/admin-auth";
-import { readUsers, seedAdminIfEmpty } from "@/lib/admin-db";
+import { findUserByUsername, seedAdminIfEmpty } from "@/lib/admin-db";
 
 export async function POST(request: NextRequest) {
   try {
@@ -12,8 +12,7 @@ export async function POST(request: NextRequest) {
     // Seed default admin from env if no users exist yet
     await seedAdminIfEmpty();
 
-    const users = await readUsers();
-    const user = users.find((u) => u.username === username);
+    const user = await findUserByUsername(username);
 
     if (!user) {
       return NextResponse.json({ error: "Invalid credentials" }, { status: 401 });

@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { writeFile, mkdir } from "fs/promises";
-import path from "path";
 import crypto from "crypto";
-import { readReviews, writeReviews, type AdminReview } from "@/lib/admin-db";
+import { listApprovedReviews, insertReview, type AdminReview } from "@/lib/admin-db";
+import { put as blobPut } from "@vercel/blob";
 
 const TELEGRAM_API_BASE = `https://api.telegram.org/bot${process.env.TELEGRAM_BOT_TOKEN}`;
 
@@ -16,17 +15,19 @@ function ratingStars(n: number) {
 
 function buildReviewMessage(data: {
   name: string;
-  city: string;
+  city?: string;
   state: string;
+  country: string;
   courseTitle: string;
   rating: number;
   text: string;
 }): string {
+  const location = [data.city, data.state, data.country].filter(Boolean).join(", ");
   return [
     "⭐ *New Review — Matrushakti Yog*",
     "",
     `👤 *Name:* ${escapeMarkdown(data.name)}`,
-    `📍 *Location:* ${escapeMarkdown(data.city)}, ${escapeMarkdown(data.state)}`,
+    `📍 *Location:* ${escapeMarkdown(location)}`,
     `🧘 *Course:* ${escapeMarkdown(data.courseTitle)}`,
     `⭐ *Rating:* ${ratingStars(data.rating)} \\(${data.rating}/5\\)`,
     "",
@@ -74,8 +75,8 @@ async function sendTelegramPhoto(
 // GET — return approved reviews for the public reviews page
 export async function GET() {
   try {
-    const reviews = await readReviews();
-    return NextResponse.json(reviews.filter((r) => r.status === "approved"));
+    const reviews = await listApprovedReviews();
+    return NextResponse.json(reviews);
   } catch {
     return NextResponse.json([]);
   }
@@ -88,6 +89,7 @@ export async function POST(request: NextRequest) {
     const name = (formData.get("name") as string | null)?.trim() ?? "";
     const city = (formData.get("city") as string | null)?.trim() ?? "";
     const state = (formData.get("state") as string | null)?.trim() ?? "";
+    const country = (formData.get("country") as string | null)?.trim() ?? "";
     const courseSlug = (formData.get("courseSlug") as string | null)?.trim() ?? "";
     const courseTitle = (formData.get("courseTitle") as string | null)?.trim() ?? "";
     const ratingRaw = formData.get("rating");
@@ -95,9 +97,9 @@ export async function POST(request: NextRequest) {
     const text = (formData.get("text") as string | null)?.trim() ?? "";
     const photoFile = formData.get("photo") as File | null;
 
-    if (!name || !city || !state || !courseSlug || !text) {
+    if (!name || !state || !country || !courseSlug || !text) {
       return NextResponse.json(
-        { success: false, message: "name, city, state, course and review text are required" },
+        { success: false, message: "name, state, country, course and review text are required" },
         { status: 400 },
       );
     }
@@ -108,7 +110,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // ── Save photo locally (works in dev; silently skipped on Vercel) ──
+    // ── Upload photo to Blob storage ──
     let photoPath: string | null = null;
     let photoBuffer: Buffer | null = null;
     let photoMime = "image/jpeg";
@@ -122,23 +124,24 @@ export async function POST(request: NextRequest) {
       photoFilename = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
 
       try {
-        const dir = path.join(process.cwd(), "public", "reviews");
-        await mkdir(dir, { recursive: true });
-        await writeFile(path.join(dir, photoFilename), photoBuffer);
-        photoPath = `/reviews/${photoFilename}`;
-      } catch {
-        // Vercel read-only filesystem — photo saved to Telegram only
+        const blob = await blobPut(`reviews/${photoFilename}`, photoBuffer, {
+          access: "public",
+          contentType: photoMime,
+        });
+        photoPath = blob.url;
+      } catch (err) {
+        console.error("Blob upload error:", err);
       }
     }
 
     // ── Save to database (pending moderation) ──
     try {
-      const reviews = await readReviews();
       const entry: AdminReview = {
         id: crypto.randomUUID(),
         name,
-        city,
+        city: city || undefined,
         state,
+        country,
         courseSlug,
         courseTitle,
         rating,
@@ -149,14 +152,13 @@ export async function POST(request: NextRequest) {
         status: "pending",
         submittedAt: new Date().toISOString(),
       };
-      reviews.unshift(entry);
-      await writeReviews(reviews);
-    } catch {
-      // DB write may fail on Vercel (ephemeral FS) — Telegram still notifies admin
+      await insertReview(entry);
+    } catch (err) {
+      console.error("Review DB insert error:", err);
     }
 
     // ── Telegram notifications ──
-    const msgText = buildReviewMessage({ name, city, state, courseTitle, rating, text });
+    const msgText = buildReviewMessage({ name, city: city || undefined, state, country, courseTitle, rating, text });
     await sendTelegramMessage(msgText);
 
     if (photoBuffer) {

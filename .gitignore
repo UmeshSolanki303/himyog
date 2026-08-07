@@ -26,5 +26,8 @@ yarn-error.log*
 # env files
 .env*.local
 
+# local data (reviews/users now live in MongoDB Atlas, not the repo)
+/data/
+
 # typescript
 next-env.d.ts

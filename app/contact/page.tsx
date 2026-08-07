@@ -23,6 +23,7 @@ import {
   Sparkles,
 } from "lucide-react";
 import { Footer } from "@/components/Footer";
+import { courses } from "@/lib/courses";
 
 // ─── Background gradient matching hero ──────────────────────────────────────
 const CONTACT_GRADIENT = `
@@ -153,11 +154,7 @@ const socialLinks = [
 ];
 
 const courseOptions = [
-  "Prenatal Yoga (Trimester 1)",
-  "Prenatal Yoga (Trimester 2)",
-  "Prenatal Yoga (Trimester 3)",
-  "Postnatal Yoga",
-  "Information Session",
+  ...courses.map((c) => c.title),
   "Other / General Enquiry",
 ];
 
