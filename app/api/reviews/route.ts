@@ -3,6 +3,11 @@ import crypto from "crypto";
 import { listApprovedReviews, insertReview, type AdminReview } from "@/lib/admin-db";
 import { put as blobPut } from "@vercel/blob";
 
+// Without this, Next.js treats GET() below as static (it touches no dynamic
+// APIs) and caches its response at build time — Vercel would then keep
+// serving whatever was in MongoDB at deploy time instead of live data.
+export const dynamic = "force-dynamic";
+
 const TELEGRAM_API_BASE = `https://api.telegram.org/bot${process.env.TELEGRAM_BOT_TOKEN}`;
 
 function escapeMarkdown(text: string): string {
