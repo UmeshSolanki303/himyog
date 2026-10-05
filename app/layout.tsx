@@ -99,7 +99,7 @@ const jsonLd = {
   "@context": "https://schema.org",
   "@graph": [
     {
-      "@type": "Organization",
+      "@type": ["Organization", "LocalBusiness"],
       "@id": `${siteUrl}/#organization`,
       name: "Matrushakti Yog",
       url: siteUrl,
@@ -110,6 +110,16 @@ const jsonLd = {
       description:
         "Prenatal and postnatal yoga classes. Safe, nurturing classes for pregnancy and the fourth trimester.",
       email: "matrushaktiyog@gmail.com",
+      telephone: "+91-93899-53873",
+      address: {
+        "@type": "PostalAddress",
+        streetAddress: "14 Bigha, Muni Ki Reti",
+        addressLocality: "Rishikesh",
+        addressRegion: "Uttarakhand",
+        postalCode: "249137",
+        addressCountry: "IN",
+      },
+      areaServed: "IN",
       sameAs: [],
     },
     {

@@ -129,16 +129,16 @@ const contactItems = [
   {
     icon: Phone,
     label: "WhatsApp / Call",
-    value: "+91 9389953873",
-    href: "tel:+91XXXXXXXXXX",
+    value: "+91 93899 53873",
+    href: "tel:+919389953873",
     color: "from-warm-sage-100 to-warm-sage-50",
     iconColor: "text-warm-sage-500",
   },
   {
     icon: MapPin,
     label: "Location",
-    value: "Online · India-wide",
-    href: null,
+    value: "14 Bigha, Muni Ki Reti, Rishikesh, Uttarakhand 249137",
+    href: "https://www.google.com/maps/search/?api=1&query=14+Bigha%2C+Muni+Ki+Reti%2C+Rishikesh%2C+Uttarakhand+249137",
     color: "from-gold-100 to-gold-50",
     iconColor: "text-gold-500",
   },
@@ -576,7 +576,15 @@ function InfoCard({
   );
 
   if (href) {
-    return <a href={href}>{inner}</a>;
+    const isExternal = href.startsWith("http");
+    return (
+      <a
+        href={href}
+        {...(isExternal ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+      >
+        {inner}
+      </a>
+    );
   }
   return inner;
 }
