@@ -204,12 +204,11 @@ interface TeamMember {
   isSample?: boolean;
 }
 
-// The 3 non-founder entries are placeholder sample data — clearly tagged
-// "Sample" in the UI below — standing in until real team members' names,
-// credentials, and bios are supplied to replace them. Real photos can still
-// be uploaded per-card from /admin/site-images at any time (photoSlotKey),
-// independent of the name/bio text.
-const team: TeamMember[] = [
+// Entries tagged isSample are placeholder data — clearly marked "Sample" in
+// the UI below — standing in until real names, credentials, and bios are
+// supplied to replace them. Real photos can still be uploaded per-card from
+// /admin/site-images at any time (photoSlotKey), independent of the text.
+const founders: TeamMember[] = [
   {
     id: "himani-dwivedi",
     photoSlotKey: "founder-photo",
@@ -218,6 +217,27 @@ const team: TeamMember[] = [
     role: "Founder & Lead Instructor · RYT-500 · Pre/Postnatal Specialist",
     bio: "Over a decade weaving yoga into the journey of motherhood — blending ancient yogic wisdom with modern prenatal & postnatal science. Himani founded Matrushakti Yog to give every mother a safe, sacred space to move through pregnancy, birth, and beyond with strength and calm.",
   },
+  {
+    id: "sample-cofounder-2",
+    photoSlotKey: "cofounder-2-photo",
+    initials: "CF",
+    name: "Co-Founder Name",
+    role: "Co-Founder · Credentials to be added",
+    bio: "Sample bio — replace with real details about this co-founder's background and role in building Matrushakti Yog.",
+    isSample: true,
+  },
+  {
+    id: "sample-cofounder-3",
+    photoSlotKey: "cofounder-3-photo",
+    initials: "CF",
+    name: "Co-Founder Name",
+    role: "Co-Founder · Credentials to be added",
+    bio: "Sample bio — replace with real details about this co-founder's background and role in building Matrushakti Yog.",
+    isSample: true,
+  },
+];
+
+const teamMembers: TeamMember[] = [
   {
     id: "sample-retreat",
     photoSlotKey: "team-specialty-retreat",
@@ -246,6 +266,38 @@ const team: TeamMember[] = [
     isSample: true,
   },
 ];
+
+function MemberCard({ member, photo }: { member: TeamMember; photo?: { url: string; alt?: string | null } }) {
+  return (
+    <div className="relative rounded-[2rem] overflow-hidden border border-sage-100/80 shadow-soft-lg bg-beige-50 p-6 sm:p-8 flex flex-col items-center text-center gap-5">
+      {member.isSample && (
+        <span className="absolute top-5 right-5 sm:top-6 sm:right-6 text-[10px] font-semibold uppercase tracking-wide text-gold-600 bg-gold-50 border border-gold-200 rounded-full px-2.5 py-1">
+          Sample
+        </span>
+      )}
+      {photo ? (
+        <div className="shrink-0 w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden">
+          <img src={photo.url} alt={photo.alt ?? member.name} className="w-full h-full object-cover" />
+        </div>
+      ) : (
+        <div className="shrink-0 w-24 h-24 sm:w-28 sm:h-28 rounded-full bg-gradient-to-br from-sage-200 via-sage-400 to-sage-600 flex items-center justify-center">
+          <span className="text-white font-serif text-2xl sm:text-3xl font-medium select-none">
+            {member.initials}
+          </span>
+        </div>
+      )}
+      <div>
+        <h3 className="font-serif text-xl sm:text-2xl text-charcoal font-medium leading-tight">
+          {member.name}
+        </h3>
+        <p className="text-sage-600 text-sm font-medium mt-1">{member.role}</p>
+        <p className="mt-4 text-charcoal-light text-sm sm:text-base leading-relaxed">
+          {member.bio}
+        </p>
+      </div>
+    </div>
+  );
+}
 
 const values = [
   {
@@ -570,48 +622,40 @@ export default async function AboutPage() {
         </div>
       </section>
 
-      {/* Our Team */}
-      <section className="py-12 sm:py-20 bg-white w-full border-y border-beige-200/60">
+      {/* Our Founders */}
+      <section className="py-12 sm:py-20 bg-white w-full border-t border-beige-200/60">
         <div className="mx-auto px-4 sm:px-6" style={{ maxWidth: "84rem" }}>
-          <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-sage-600 mb-6 text-center">
-            Our Team
-          </p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8">
-            {team.map((member) => {
-              const photo = siteImages[member.photoSlotKey];
-              return (
-              <div
-                key={member.id}
-                className="relative rounded-[2rem] overflow-hidden border border-sage-100/80 shadow-soft-lg bg-beige-50 p-6 sm:p-8 flex flex-col sm:flex-row items-start gap-6 sm:gap-8"
-              >
-                {member.isSample && (
-                  <span className="absolute top-5 right-5 sm:top-6 sm:right-6 text-[10px] font-semibold uppercase tracking-wide text-gold-600 bg-gold-50 border border-gold-200 rounded-full px-2.5 py-1">
-                    Sample
-                  </span>
-                )}
-                {photo ? (
-                  <div className="shrink-0 w-20 h-20 sm:w-24 sm:h-24 rounded-full overflow-hidden">
-                    <img src={photo.url} alt={photo.alt ?? member.name} className="w-full h-full object-cover" />
-                  </div>
-                ) : (
-                  <div className="shrink-0 w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gradient-to-br from-sage-200 via-sage-400 to-sage-600 flex items-center justify-center">
-                    <span className="text-white font-serif text-2xl sm:text-3xl font-medium select-none">
-                      {member.initials}
-                    </span>
-                  </div>
-                )}
-                <div>
-                  <h3 className="font-serif text-xl sm:text-2xl text-charcoal font-medium leading-tight">
-                    {member.name}
-                  </h3>
-                  <p className="text-sage-600 text-sm font-medium mt-1">{member.role}</p>
-                  <p className="mt-4 text-charcoal-light text-base leading-relaxed">
-                    {member.bio}
-                  </p>
-                </div>
-              </div>
-              );
-            })}
+          <div className="text-center mb-8 sm:mb-12">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-sage-600 mb-3">
+              Our Founders
+            </p>
+            <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl text-charcoal font-medium">
+              The Hearts Behind Matrushakti Yog
+            </h2>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+            {founders.map((member) => (
+              <MemberCard key={member.id} member={member} photo={siteImages[member.photoSlotKey]} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Our Team */}
+      <section className="py-12 sm:py-20 bg-white w-full border-b border-beige-200/60">
+        <div className="mx-auto px-4 sm:px-6" style={{ maxWidth: "84rem" }}>
+          <div className="text-center mb-8 sm:mb-12">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-sage-600 mb-3">
+              Our Team
+            </p>
+            <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl text-charcoal font-medium">
+              Meet the Guides Who Support You
+            </h2>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+            {teamMembers.map((member) => (
+              <MemberCard key={member.id} member={member} photo={siteImages[member.photoSlotKey]} />
+            ))}
           </div>
         </div>
       </section>

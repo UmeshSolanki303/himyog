@@ -19,6 +19,18 @@ export const SITE_IMAGE_SLOTS: SiteImageSlot[] = [
     group: "Our Team",
   },
   {
+    key: "cofounder-2-photo",
+    label: "Co-Founder 2",
+    description: "Founder card photo in the About page's \"Our Founders\" section.",
+    group: "Our Team",
+  },
+  {
+    key: "cofounder-3-photo",
+    label: "Co-Founder 3",
+    description: "Founder card photo in the About page's \"Our Founders\" section.",
+    group: "Our Team",
+  },
+  {
     key: "team-specialty-retreat",
     label: "Retreat Facilitation",
     description: "Specialty card photo in the About page's \"Our Team\" section.",
