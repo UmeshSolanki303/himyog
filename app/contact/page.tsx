@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import {
   motion,
@@ -23,6 +23,7 @@ import {
   Sparkles,
 } from "lucide-react";
 import { Footer } from "@/components/Footer";
+import { LocationMap } from "@/components/LocationMap";
 import { courses } from "@/lib/courses";
 
 // ─── Background gradient matching hero ──────────────────────────────────────
@@ -465,6 +466,15 @@ function ContactForm() {
 
 // ─── Instructor card ──────────────────────────────────────────────────────────
 function InstructorCard({ shouldReduce }: { shouldReduce: boolean }) {
+  const [photoUrl, setPhotoUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetch("/api/site-images")
+      .then((r) => (r.ok ? r.json() : {}))
+      .then((data: Record<string, { url: string }>) => setPhotoUrl(data["founder-photo"]?.url ?? null))
+      .catch(() => {});
+  }, []);
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 24 }}
@@ -504,9 +514,13 @@ function InstructorCard({ shouldReduce }: { shouldReduce: boolean }) {
           </>
         )}
         <div className="relative w-full h-full rounded-full bg-gradient-to-br from-sage-200 via-sage-400 to-sage-600 flex items-center justify-center overflow-hidden">
-          <span className="text-white font-serif text-2xl sm:text-3xl font-medium select-none">
-            HD
-          </span>
+          {photoUrl ? (
+            <img src={photoUrl} alt="Himani Dwivedi" className="w-full h-full object-cover" />
+          ) : (
+            <span className="text-white font-serif text-2xl sm:text-3xl font-medium select-none">
+              HD
+            </span>
+          )}
         </div>
       </div>
 
@@ -821,6 +835,12 @@ export default function ContactPage() {
           </div>
         </div>
       </section>
+
+      <LocationMap
+        title="Come Find Us"
+        description="Drop by our studio, or reach out online — here's exactly where we are."
+        className="bg-white"
+      />
 
       <Footer />
     </main>

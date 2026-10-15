@@ -81,7 +81,27 @@ module.exports = {
         "2xl": "1rem",
         "3xl": "1.5rem",
       },
+      typography: ({ theme }) => ({
+        DEFAULT: {
+          css: {
+            "--tw-prose-body": theme("colors.charcoal.light"),
+            "--tw-prose-headings": theme("colors.charcoal.DEFAULT"),
+            "--tw-prose-links": theme("colors.sage.600"),
+            "--tw-prose-bold": theme("colors.charcoal.DEFAULT"),
+            "--tw-prose-quotes": theme("colors.charcoal.light"),
+            "--tw-prose-quote-borders": theme("colors.sage.200"),
+            "--tw-prose-bullets": theme("colors.sage.300"),
+            "--tw-prose-hr": theme("colors.beige.300"),
+            "--tw-prose-code": theme("colors.sage.700"),
+            fontFamily: theme("fontFamily.sans").join(", "),
+            maxWidth: "none",
+            a: { fontWeight: "500", textDecoration: "none" },
+            "a:hover": { textDecoration: "underline" },
+            "h1, h2, h3, h4": { fontFamily: theme("fontFamily.serif").join(", "), fontWeight: "600" },
+          },
+        },
+      }),
     },
   },
-  plugins: [],
+  plugins: [require("@tailwindcss/typography")],
 };

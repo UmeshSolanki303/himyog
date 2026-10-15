@@ -12,8 +12,11 @@ import {
   PenLine,
   ChevronDown,
   Sparkles,
+  Copy,
+  Check,
+  ExternalLink,
 } from "lucide-react";
-import { COURSE_OPTIONS, type Review } from "@/lib/reviews-data";
+import { COURSE_OPTIONS, GOOGLE_REVIEW_URL, type Review } from "@/lib/reviews-data";
 
 // ─── Star picker ──────────────────────────────────────────────────────────────
 function StarPicker({ value, onChange }: { value: number; onChange: (v: number) => void }) {
@@ -66,6 +69,7 @@ export function WriteReviewModal({ open, onClose, onSubmitted }: WriteReviewModa
   const [photo, setPhoto] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [error, setError] = useState("");
+  const [copied, setCopied] = useState(false);
   const [form, setForm] = useState({
     name: "",
     city: "",
@@ -92,6 +96,7 @@ export function WriteReviewModal({ open, onClose, onSubmitted }: WriteReviewModa
         setPhoto(null);
         setPreview(null);
         setError("");
+        setCopied(false);
         setForm({ name: "", city: "", state: "", country: "", courseSlug: "", text: "" });
       }, 300);
     }
@@ -113,6 +118,17 @@ export function WriteReviewModal({ open, onClose, onSubmitted }: WriteReviewModa
     setPhoto(file);
     setPreview(URL.createObjectURL(file));
     setError("");
+  }
+
+  async function copyReviewText() {
+    try {
+      await navigator.clipboard.writeText(form.text);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2500);
+    } catch {
+      // Clipboard API unavailable (e.g. insecure context) — the Google
+      // button still works, they'll just need to type it themselves.
+    }
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -232,9 +248,49 @@ export function WriteReviewModal({ open, onClose, onSubmitted }: WriteReviewModa
                         <Sparkles className="w-4 h-4" />
                         <span className="italic font-medium">Namaste 🙏</span>
                       </div>
+
+                      {/* Google cross-post prompt */}
+                      <div className="w-full rounded-2xl bg-beige-50 border border-beige-200 p-4 sm:p-5 flex flex-col gap-3 text-left">
+                        <div>
+                          <p className="text-sm font-medium text-charcoal">
+                            Help even more mothers find us
+                          </p>
+                          <p className="text-xs text-slate-muted mt-1 leading-relaxed">
+                            Copy your review, then paste it onto our Google
+                            profile — it only takes a moment.
+                          </p>
+                        </div>
+                        <div className="flex flex-col sm:flex-row gap-2.5">
+                          <button
+                            type="button"
+                            onClick={copyReviewText}
+                            disabled={!form.text}
+                            className="flex-1 inline-flex items-center justify-center gap-2 rounded-xl border border-sage-200 bg-white text-charcoal text-sm font-medium px-4 py-2.5 hover:bg-sage-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                          >
+                            {copied ? (
+                              <>
+                                <Check className="w-4 h-4 text-sage-600" /> Copied
+                              </>
+                            ) : (
+                              <>
+                                <Copy className="w-4 h-4" /> Copy my review
+                              </>
+                            )}
+                          </button>
+                          <a
+                            href={GOOGLE_REVIEW_URL}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex-1 inline-flex items-center justify-center gap-2 rounded-xl bg-sage-600 text-white text-sm font-semibold px-4 py-2.5 hover:bg-sage-700 transition-colors"
+                          >
+                            Open Google Reviews <ExternalLink className="w-3.5 h-3.5 shrink-0" />
+                          </a>
+                        </div>
+                      </div>
+
                       <button
                         onClick={onClose}
-                        className="mt-2 rounded-2xl bg-sage-600 text-white px-8 py-3 text-sm font-semibold hover:bg-sage-700 transition-colors"
+                        className="mt-1 text-sage-600 hover:text-sage-700 text-sm font-medium underline underline-offset-4 transition-colors"
                       >
                         Close
                       </button>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { assetPath } from "@/lib/assetPath";
 import { motion, useReducedMotion } from "framer-motion";
 import { Award } from "lucide-react";
@@ -13,16 +13,21 @@ interface TeamMember {
   bio: string;
   image: string;
   initials: string;
+  photoSlotKey?: string; // overrides `image` with a real upload from /admin/site-images, when one exists
 }
 
 const team: TeamMember[] = [
   {
-    name: "Founder Name",
+    // Matches the founder bio already published on /about and /contact —
+    // not new information, just the same real name in a place that had
+    // been left as a placeholder.
+    name: "Himani Dwivedi",
     role: "Founder & Lead Yoga Instructor",
     credentials: "RYT-500 · Pre/Postnatal Specialist",
     bio: "With over a decade of experience weaving yoga into the journey of motherhood, she founded Matrushakti Yog to create a sacred, nurturing space for every mother. Her teaching blends ancient yogic wisdom with modern prenatal and postnatal science.",
     image: "/images/team/dummy.png",
-    initials: "FN",
+    initials: "HD",
+    photoSlotKey: "founder-photo",
   },
   {
     name: "Consultant Name",
@@ -46,12 +51,17 @@ function ProfileAvatar({
   name,
   image,
   initials,
+  realPhotoUrl,
 }: {
   name: string;
   image: string;
   initials: string;
+  realPhotoUrl?: string;
 }) {
   const [imgError, setImgError] = useState(false);
+  // A real upload from /admin/site-images is an absolute URL and shouldn't
+  // be run through assetPath (that's only for bundled /public assets).
+  const src = realPhotoUrl ?? assetPath(image);
 
   return (
     <div className="relative w-24 h-24 sm:w-28 sm:h-28">
@@ -68,7 +78,7 @@ function ProfileAvatar({
       <div className="relative w-full h-full rounded-full overflow-hidden bg-gradient-to-br from-sage-200 to-sage-500">
         {!imgError ? (
           <img
-            src={assetPath(image)}
+            src={src}
             alt={name}
             className="w-full h-full object-cover"
             onError={() => setImgError(true)}
@@ -88,9 +98,11 @@ function ProfileAvatar({
 function TeamCard({
   person,
   shouldReduce,
+  realPhotoUrl,
 }: {
   person: TeamMember;
   shouldReduce: boolean;
+  realPhotoUrl?: string;
 }) {
   return (
     <motion.div
@@ -101,6 +113,7 @@ function TeamCard({
         name={person.name}
         image={person.image}
         initials={person.initials}
+        realPhotoUrl={realPhotoUrl}
       />
 
       <h3 className="mt-5 font-serif text-xl text-charcoal font-medium">
@@ -137,6 +150,18 @@ const cardItem = {
 
 export function TeamSection() {
   const shouldReduce = useReducedMotion();
+  const [photoUrls, setPhotoUrls] = useState<Record<string, string>>({});
+
+  useEffect(() => {
+    fetch("/api/site-images")
+      .then((r) => (r.ok ? r.json() : {}))
+      .then((data: Record<string, { url: string }>) => {
+        const map: Record<string, string> = {};
+        for (const [key, img] of Object.entries(data)) map[key] = img.url;
+        setPhotoUrls(map);
+      })
+      .catch(() => {});
+  }, []);
 
   return (
     <SectionReveal
@@ -182,7 +207,7 @@ export function TeamSection() {
                 viewport={{ once: true, margin: "-40px" }}
                 className="flex-shrink-0 w-72 sm:w-80"
               >
-                <TeamCard person={person} shouldReduce={!!shouldReduce} />
+                <TeamCard person={person} shouldReduce={!!shouldReduce} realPhotoUrl={person.photoSlotKey ? photoUrls[person.photoSlotKey] : undefined} />
               </motion.div>
             ))}
           </div>
@@ -198,7 +223,7 @@ export function TeamSection() {
         >
           {team.map((person, i) => (
             <motion.div key={`${person.name}-${i}`} variants={cardItem}>
-              <TeamCard person={person} shouldReduce={!!shouldReduce} />
+              <TeamCard person={person} shouldReduce={!!shouldReduce} realPhotoUrl={person.photoSlotKey ? photoUrls[person.photoSlotKey] : undefined} />
             </motion.div>
           ))}
         </motion.div>

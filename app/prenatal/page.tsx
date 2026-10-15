@@ -1,8 +1,15 @@
 import type { Metadata } from "next";
 import { PageHero } from "@/components/PageHero";
-import { ContentSection, ContentVideo } from "@/components/ContentSection";
+import { ContentSection, ContentImage } from "@/components/ContentSection";
 import { GallerySection } from "@/components/GallerySection";
+import { CourseGallerySection } from "@/components/CourseGallerySection";
 import { Footer } from "@/components/Footer";
+import { listSiteImages } from "@/lib/admin-db";
+
+// Real gallery photos can be added any time from /admin/gallery — revalidate
+// periodically rather than only at build time, or newly uploaded photos
+// wouldn't show up until the next deploy.
+export const revalidate = 60;
 
 const PRENATAL_GALLERY_ITEMS = [
   {
@@ -65,13 +72,17 @@ export const metadata: Metadata = {
 const HERO_IMAGE =
   "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=1600&q=80";
 
-export default function PrenatalPage() {
+export default async function PrenatalPage() {
+  const siteImages = await listSiteImages().catch(
+    () => ({}) as Awaited<ReturnType<typeof listSiteImages>>,
+  );
+
   return (
     <main>
       <PageHero
         title="Prenatal Yoga"
         description="Safe, gentle yoga for every trimester. Ease discomfort, build strength, and prepare your body and mind for birth in a supportive environment."
-        imageSrc={HERO_IMAGE}
+        imageSrc={siteImages["prenatal-hero"]?.url ?? HERO_IMAGE}
       />
       <ContentSection title="What to expect" className="bg-beige-50">
         <p className="leading-relaxed mb-6">
@@ -121,11 +132,22 @@ export default function PrenatalPage() {
       </ContentSection>
 
       <ContentSection
-        title="Watch: Introduction to prenatal yoga"
+        title="Step into our practice space"
         className="bg-beige-50"
       >
-        <ContentVideo src="" title="Introduction to prenatal yoga" />
+        <p className="leading-relaxed">
+          Every mat, every prop, every session is set up with one thing in
+          mind — your safety and comfort, trimester by trimester. This is
+          the space you&apos;ll come to know as your own.
+        </p>
+        <ContentImage
+          src="https://images.unsplash.com/photo-1601925260368-ae2f83cf8b7f?w=1200&q=80"
+          alt="Yoga mats ready for a prenatal class"
+          caption="A calm, prepared space for every session"
+        />
       </ContentSection>
+
+      <CourseGallerySection courseSlug="prenatal-yoga" className="bg-white" />
 
       <Footer />
     </main>

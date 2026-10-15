@@ -5,9 +5,17 @@ import { motion } from "framer-motion";
 import { Clock, Monitor, ArrowRight } from "lucide-react";
 import { CtaButton } from "./CtaButton";
 import { SectionReveal } from "./SectionReveal";
-import { courses } from "@/lib/courses";
+import { courses, getCourseUrl } from "@/lib/courses";
+import { getCourseHeroSlotKey } from "@/lib/site-images";
+import type { SiteImage } from "@/lib/admin-db";
 
-export function CoursesSection() {
+interface CoursesSectionProps {
+  // Resolved server-side (app/page.tsx is a Server Component) so this stays
+  // a plain prop rather than a client-side fetch waterfall.
+  siteImages?: Record<string, SiteImage>;
+}
+
+export function CoursesSection({ siteImages = {} }: CoursesSectionProps) {
   return (
     <SectionReveal
       as="section"
@@ -46,7 +54,9 @@ export function CoursesSection() {
               <div className="relative aspect-[4/3] overflow-hidden shrink-0">
                 <div
                   className="absolute inset-0 bg-cover bg-center transition-transform duration-500 hover:scale-105"
-                  style={{ backgroundImage: `url(${course.image})` }}
+                  style={{
+                    backgroundImage: `url(${siteImages[getCourseHeroSlotKey(course.slug)]?.url ?? course.image})`,
+                  }}
                   aria-hidden
                 />
                 {course.badge && (
@@ -86,7 +96,7 @@ export function CoursesSection() {
                 {/* CTA buttons */}
                 <div className="flex flex-col sm:flex-row gap-3 mt-auto">
                   <Link
-                    href={`/courses/${course.slug}`}
+                    href={getCourseUrl(course.slug)}
                     className="flex-1 inline-flex items-center justify-center gap-2 text-sm font-medium text-sage-600 border border-sage-300 hover:bg-sage-50 rounded-xl px-4 py-2.5 transition-colors"
                   >
                     Course Details

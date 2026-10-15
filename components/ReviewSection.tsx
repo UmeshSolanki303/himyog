@@ -12,9 +12,8 @@ import {
 } from "framer-motion";
 import { Star, ChevronLeft, ChevronRight, X, ArrowRight, PenLine, Sparkles, MapPin, Quote } from "lucide-react";
 import { SectionReveal } from "./SectionReveal";
-import { WriteReviewModal } from "./WriteReviewModal";
 import { useReviews } from "@/lib/useReviews";
-import { COURSE_META, reviewerLabel, formatLocation, type Review } from "@/lib/reviews-data";
+import { COURSE_META, reviewerLabel, formatLocation, GOOGLE_REVIEW_URL, type Review } from "@/lib/reviews-data";
 
 const HOMEPAGE_REVIEW_COUNT = 8;
 
@@ -234,7 +233,7 @@ function ReviewDetailModal({
 // ─── Write-a-review widget ──────────────────────────────────────────────────
 const WIDGET_TILT_RANGE = 7;
 
-function WriteReviewWidget({ onOpen, reviews }: { onOpen: () => void; reviews: Review[] }) {
+function WriteReviewWidget({ reviews }: { reviews: Review[] }) {
   const shouldReduce = useReducedMotion();
   const cardRef = useRef<HTMLDivElement>(null);
 
@@ -371,8 +370,10 @@ function WriteReviewWidget({ onOpen, reviews }: { onOpen: () => void; reviews: R
                 aria-hidden
               />
             )}
-            <motion.button
-              onClick={onOpen}
+            <motion.a
+              href={GOOGLE_REVIEW_URL}
+              target="_blank"
+              rel="noopener noreferrer"
               whileHover={shouldReduce ? {} : { scale: 1.04, y: -2 }}
               whileTap={shouldReduce ? {} : { scale: 0.96 }}
               className="group relative inline-flex items-center gap-2 rounded-2xl bg-sage-600 hover:bg-sage-700 text-white px-6 py-3.5 text-sm font-semibold shadow-soft-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-sage-400 focus:ring-offset-2"
@@ -380,7 +381,7 @@ function WriteReviewWidget({ onOpen, reviews }: { onOpen: () => void; reviews: R
               <PenLine className="w-4 h-4 shrink-0 transition-transform duration-200 group-hover:-rotate-12" />
               Write a Review
               <ArrowRight className="w-4 h-4 shrink-0 -mr-1 transition-transform duration-200 group-hover:translate-x-1" />
-            </motion.button>
+            </motion.a>
           </div>
         </div>
       </motion.div>
@@ -390,9 +391,8 @@ function WriteReviewWidget({ onOpen, reviews }: { onOpen: () => void; reviews: R
 
 export function ReviewSection() {
   const shouldReduce = useReducedMotion();
-  const { reviews, addReview } = useReviews();
+  const { reviews } = useReviews();
   const [selected, setSelected] = useState<Review | null>(null);
-  const [writeOpen, setWriteOpen] = useState(false);
 
   const featured = useMemo(() => {
     return [...reviews]
@@ -481,7 +481,7 @@ export function ReviewSection() {
             </Link>
           </div>
 
-          <WriteReviewWidget onOpen={() => setWriteOpen(true)} reviews={featured} />
+          <WriteReviewWidget reviews={featured} />
         </div>
       </SectionReveal>
 
@@ -492,14 +492,6 @@ export function ReviewSection() {
         )}
       </AnimatePresence>
 
-      {/* Write review modal */}
-      <WriteReviewModal
-        open={writeOpen}
-        onClose={() => setWriteOpen(false)}
-        onSubmitted={(review) => {
-          addReview(review);
-        }}
-      />
     </>
   );
 }

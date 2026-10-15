@@ -1,3 +1,9 @@
+// The single source of truth for where every "Write a Review" trigger on
+// the site sends people — reviews are collected on Google directly and
+// curated onto the site manually from /admin/reviews, rather than through
+// an on-site submission form.
+export const GOOGLE_REVIEW_URL = "https://g.page/r/CW0K9lxlSCHeEBE/review";
+
 export interface Review {
   id: string;
   name: string;

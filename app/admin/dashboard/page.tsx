@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { MessageSquare, Clock, CheckCircle2, XCircle, Star, Users } from "lucide-react";
-import type { AdminReview } from "@/lib/admin-db";
+import { MessageSquare, Clock, CheckCircle2, XCircle, Star, Users, Newspaper } from "lucide-react";
+import type { AdminReview, AdminBlogPost } from "@/lib/admin-db";
 
 interface Stat {
   label: string;
@@ -15,14 +15,19 @@ interface Stat {
 
 export default function DashboardPage() {
   const [reviews, setReviews] = useState<AdminReview[]>([]);
+  const [posts, setPosts] = useState<AdminBlogPost[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("/api/admin/reviews")
-      .then((r) => r.ok ? r.json() : [])
-      .then(setReviews)
+    Promise.all([
+      fetch("/api/admin/reviews").then((r) => r.ok ? r.json() : []),
+      fetch("/api/admin/blog").then((r) => r.ok ? r.json() : []),
+    ])
+      .then(([r, p]) => { setReviews(r); setPosts(p); })
       .finally(() => setLoading(false));
   }, []);
+
+  const publishedPosts = posts.filter((p) => p.status === "published").length;
 
   const pending  = reviews.filter((r) => r.status === "pending").length;
   const approved = reviews.filter((r) => r.status === "approved").length;
@@ -37,6 +42,7 @@ export default function DashboardPage() {
     { label: "Approved",         value: approved,       icon: CheckCircle2,  color: "bg-warm-sage-100 text-warm-sage-600", href: "/admin/reviews?status=approved" },
     { label: "Rejected",         value: rejected,       icon: XCircle,       color: "bg-red-50 text-red-500",          href: "/admin/reviews?status=rejected" },
     { label: "Average Rating",   value: `${avgRating} ★`, icon: Star,        color: "bg-peach-100 text-peach-400",     href: "/admin/reviews" },
+    { label: "Published Posts",  value: publishedPosts, icon: Newspaper,     color: "bg-sage-100 text-sage-600",       href: "/admin/blog?status=published" },
     { label: "Manage Users",     value: "→",            icon: Users,         color: "bg-beige-200 text-charcoal",      href: "/admin/users" },
   ];
 

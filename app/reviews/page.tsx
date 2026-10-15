@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import {
   motion,
@@ -11,14 +11,12 @@ import {
   Star,
   X,
   ArrowLeft,
-  PenLine,
   MapPin,
   ZoomIn,
 } from "lucide-react";
 import { Footer } from "@/components/Footer";
-import { WriteReviewModal } from "@/components/WriteReviewModal";
 import { useReviews } from "@/lib/useReviews";
-import { COURSES, COURSE_META, reviewerLabel, formatLocation, type Review } from "@/lib/reviews-data";
+import { COURSES, COURSE_META, reviewerLabel, formatLocation, GOOGLE_REVIEW_URL, type Review } from "@/lib/reviews-data";
 
 // ─── Star display ─────────────────────────────────────────────────────────────
 function Stars({ rating, size = "sm" }: { rating: number; size?: "sm" | "md" }) {
@@ -212,16 +210,10 @@ function StatsBar({ reviews }: { reviews: Review[] }) {
 
 // ─── Main page ────────────────────────────────────────────────────────────────
 export default function ReviewsPage() {
-  const shouldReduce = useReducedMotion();
   const [filter, setFilter] = useState("all");
-  const [modalOpen, setModalOpen] = useState(false);
-  const { reviews, addReview } = useReviews();
+  const { reviews } = useReviews();
 
   const filtered = filter === "all" ? reviews : reviews.filter(r => r.courseSlug === filter);
-
-  const handleSubmitted = useCallback((review: Review) => {
-    addReview(review);
-  }, [addReview]);
 
   return (
     <main>
@@ -334,12 +326,14 @@ export default function ReviewsPage() {
                   <span className="text-5xl">🌸</span>
                   <p className="text-charcoal font-serif text-xl">No reviews yet for this course</p>
                   <p className="text-slate-muted text-sm">Be the first to share your experience!</p>
-                  <button
-                    onClick={() => setModalOpen(true)}
+                  <a
+                    href={GOOGLE_REVIEW_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="mt-2 rounded-2xl bg-sage-600 text-white px-6 py-3 text-sm font-semibold hover:bg-sage-700 transition-colors"
                   >
                     Add the first review
-                  </button>
+                  </a>
                 </motion.div>
               ) : (
                 <motion.div
@@ -361,36 +355,6 @@ export default function ReviewsPage() {
       </section>
 
       <Footer />
-
-      {/* ── Floating Add Review button ─────────────────────────── */}
-      <div className="fixed bottom-6 right-5 sm:bottom-8 sm:right-8 z-40">
-        {!shouldReduce && (
-          <motion.div
-            className="absolute inset-0 rounded-2xl"
-            style={{ background: "radial-gradient(circle, rgba(184,64,112,0.35) 0%, transparent 70%)", filter: "blur(12px)" }}
-            animate={{ scale: [1, 1.15, 1], opacity: [0.6, 1, 0.6] }}
-            transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
-            aria-hidden
-          />
-        )}
-        <motion.button
-          onClick={() => setModalOpen(true)}
-          whileHover={shouldReduce ? {} : { scale: 1.05, y: -2 }}
-          whileTap={shouldReduce ? {} : { scale: 0.97 }}
-          className="relative inline-flex items-center gap-2 rounded-2xl bg-sage-600 hover:bg-sage-700 text-white px-4 py-3 sm:px-5 sm:py-3.5 text-sm font-semibold shadow-soft-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-sage-400 focus:ring-offset-2"
-        >
-          <PenLine className="w-4 h-4 shrink-0" />
-          <span className="hidden sm:inline">Write a Review</span>
-          <span className="sm:hidden">Review</span>
-        </motion.button>
-      </div>
-
-      {/* ── Review modal ──────────────────────────────────────────── */}
-      <WriteReviewModal
-        open={modalOpen}
-        onClose={() => setModalOpen(false)}
-        onSubmitted={handleSubmitted}
-      />
     </main>
   );
 }

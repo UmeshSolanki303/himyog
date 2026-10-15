@@ -22,6 +22,9 @@ import {
   Brain,
 } from "lucide-react";
 
+// How many courses the mobile drawer shows before "Show more courses".
+const MOBILE_COURSES_COLLAPSED_COUNT = 2;
+
 // Order matches the school's official course listing.
 const COURSE_LINKS = [
   {
@@ -49,7 +52,7 @@ const COURSE_LINKS = [
     icon: Moon,
   },
   {
-    href: "/courses/pregnancy-wellness",
+    href: "/retreat",
     label: "Pregnancy Wellness Retreat",
     tagline: "Immersive getaway",
     icon: Palmtree,
@@ -69,7 +72,9 @@ const COURSE_LINKS = [
 ];
 
 const NAV_LINKS = [
+  { href: "/about", label: "About" },
   { href: "/reviews", label: "Reviews" },
+  { href: "/blog", label: "Blog" },
   { href: "/contact", label: "Contact" },
 ];
 
@@ -281,6 +286,7 @@ export function Header() {
   const { scrollY, scrollYProgress } = useScroll();
   const [hidden, setHidden] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [coursesExpanded, setCoursesExpanded] = useState(false);
   const pathname = usePathname();
 
   const scaleX = useSpring(scrollYProgress, {
@@ -290,10 +296,15 @@ export function Header() {
   });
 
   useMotionValueEvent(scrollY, "change", (current) => {
+    // iOS Safari doesn't fully honor `overflow: hidden` on body for
+    // touch-driven scroll — a rubber-band bounce while browsing the open
+    // mobile menu can still nudge window scrollY. Without this guard that
+    // stray scroll event would hide the header (and close the menu with
+    // it) mid-browse, which is exactly the "menu disappears on scroll" bug.
+    if (mobileOpen) return;
     const previous = scrollY.getPrevious() ?? 0;
     if (current > previous && current > 80) {
       setHidden(true);
-      setMobileOpen(false);
     } else {
       setHidden(false);
     }
@@ -303,6 +314,11 @@ export function Header() {
   useEffect(() => {
     setMobileOpen(false);
   }, [pathname]);
+
+  // Collapse the courses list back down each time the menu is reopened
+  useEffect(() => {
+    if (!mobileOpen) setCoursesExpanded(false);
+  }, [mobileOpen]);
 
   // Prevent body scroll when mobile menu open
   useEffect(() => {
@@ -376,13 +392,16 @@ export function Header() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
             transition={{ duration: 0.2, ease: [0.25, 0.46, 0.45, 0.94] }}
-            className="md:hidden bg-sage-50/98 backdrop-blur-md border-b border-sage-100 shadow-soft"
+            className="md:hidden bg-sage-50/98 backdrop-blur-md border-b border-sage-100 shadow-soft max-h-[calc(100dvh-var(--header-height))] overflow-y-auto overscroll-contain"
           >
             <div className="px-4 py-3 flex flex-col">
               <span className="px-3 pt-2 pb-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-sage-500/80">
                 Courses
               </span>
-              {COURSE_LINKS.map((link, i) => {
+              {(coursesExpanded
+                ? COURSE_LINKS
+                : COURSE_LINKS.slice(0, MOBILE_COURSES_COLLAPSED_COUNT)
+              ).map((link, i) => {
                 const isActive = pathname === link.href;
                 const Icon = link.icon;
                 return (
@@ -420,6 +439,21 @@ export function Header() {
                   </motion.div>
                 );
               })}
+              {COURSE_LINKS.length > MOBILE_COURSES_COLLAPSED_COUNT && (
+                <button
+                  type="button"
+                  onClick={() => setCoursesExpanded((v) => !v)}
+                  className="flex items-center gap-1.5 px-3 py-2 text-xs font-medium text-sage-600 hover:text-sage-700 transition-colors"
+                  aria-expanded={coursesExpanded}
+                >
+                  {coursesExpanded
+                    ? "Show less"
+                    : `Show ${COURSE_LINKS.length - MOBILE_COURSES_COLLAPSED_COUNT} more courses`}
+                  <ChevronDown
+                    className={`w-3.5 h-3.5 transition-transform duration-200 ${coursesExpanded ? "rotate-180" : ""}`}
+                  />
+                </button>
+              )}
               <Link
                 href="/courses"
                 onClick={() => setMobileOpen(false)}

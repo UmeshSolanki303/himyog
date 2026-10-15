@@ -1,8 +1,15 @@
 import type { Metadata } from "next";
 import { PageHero } from "@/components/PageHero";
-import { ContentSection, ContentVideo } from "@/components/ContentSection";
+import { ContentSection, ContentImage } from "@/components/ContentSection";
 import { GallerySection } from "@/components/GallerySection";
+import { CourseGallerySection } from "@/components/CourseGallerySection";
 import { Footer } from "@/components/Footer";
+import { listSiteImages } from "@/lib/admin-db";
+
+// Real gallery photos can be added any time from /admin/gallery — revalidate
+// periodically rather than only at build time, or newly uploaded photos
+// wouldn't show up until the next deploy.
+export const revalidate = 60;
 
 export const metadata: Metadata = {
   title: "Postnatal Yoga",
@@ -46,14 +53,14 @@ const POSTNATAL_GALLERY_ITEMS = [
     alt: "Mindful practice",
     caption: "Adapted for your pace",
     description:
-      "Adapting training to your own pace involves listening to your body to set intensity levels rather than following rigid, one-size-fits-all targets. True progress comes from consistency—such as running 65–80% of mileage at an 'easy' conversational pace—and aligning goals with your current fitness level, not others",
+      "There's no fixed timeline for postpartum recovery. Your instructor adjusts every sequence to how your body feels that day — whether you're six weeks or six months postpartum — so progress is steady, safe, and entirely your own.",
   },
   {
     src: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=600&q=80",
     alt: "Calm and connection",
     caption: "Bond while you move",
     description:
-      "Securing your rental bond when moving requires a final inspection with your landlord to identify repairs, ensuring a smooth bond transfer or return. In shared housing, arrange a lease transfer in writing, having the incoming tenant pay you directly to transfer the bond. Act responsibly by documenting everything for a clean move.",
+      "Shared poses, soft eye contact, and skin-to-skin moments woven into class let movement become a form of bonding — a few quiet minutes each week that are just for you and your baby.",
   },
   {
     src: "https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=600&q=80",
@@ -64,13 +71,17 @@ const POSTNATAL_GALLERY_ITEMS = [
   },
 ];
 
-export default function PostnatalPage() {
+export default async function PostnatalPage() {
+  const siteImages = await listSiteImages().catch(
+    () => ({}) as Awaited<ReturnType<typeof listSiteImages>>,
+  );
+
   return (
     <main>
       <PageHero
         title="Postnatal Yoga"
         description="Recover gently and rebuild strength after birth. Pelvic floor and core recovery, with optional baby-and-me sessions so you can bond while you move."
-        imageSrc={HERO_IMAGE}
+        imageSrc={siteImages["postnatal-hero"]?.url ?? HERO_IMAGE}
       />
       <ContentSection title="Recovery and strength" className="bg-beige-50">
         <p className="leading-relaxed mb-6">
@@ -116,11 +127,23 @@ export default function PostnatalPage() {
       </ContentSection>
 
       <ContentSection
-        title="Watch: Postnatal recovery tips"
+        title="A gentler fourth trimester"
         className="bg-white"
       >
-        <ContentVideo src="" title="Postnatal recovery tips" />
+        <p className="leading-relaxed">
+          No rush to &ldquo;bounce back.&rdquo; Every class leaves space for
+          stillness — a few minutes of rest woven into the practice, because
+          recovery is as much about slowing down as it is about rebuilding
+          strength.
+        </p>
+        <ContentImage
+          src="https://images.unsplash.com/photo-1593810450967-f9c42742e326?w=1200&q=80"
+          alt="Restorative postnatal stretch"
+          caption="Space to rest, not just to recover"
+        />
       </ContentSection>
+
+      <CourseGallerySection courseSlug="postnatal-yoga" className="bg-white" />
 
       <Footer />
     </main>

@@ -1,11 +1,22 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, Clock, Monitor, Users, CheckCircle2, BookOpen } from "lucide-react";
-import { courses, getCourseBySlug } from "@/lib/courses";
+import { courses, getCourseBySlug, getCourseUrl, hasDedicatedPage } from "@/lib/courses";
+import { getCourseHeroSlotKey } from "@/lib/site-images";
 import { CtaButton } from "@/components/CtaButton";
 import { Footer } from "@/components/Footer";
 import { MobileEnrollBar } from "@/components/MobileEnrollBar";
+import { GallerySection } from "@/components/GallerySection";
+import { CourseGallerySection } from "@/components/CourseGallerySection";
+import { listSiteImages } from "@/lib/admin-db";
+
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://matrushaktiyog.com";
+
+// Real gallery photos can be added any time from /admin/gallery — revalidate
+// periodically rather than only at build time, or newly uploaded photos
+// wouldn't show up until the next deploy.
+export const revalidate = 60;
 
 interface Props {
   params: { slug: string };
@@ -21,12 +32,28 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: course.title,
     description: course.shortDescription,
+    // Courses with a dedicated, richer page (prenatal, postnatal, the
+    // retreat) still generate this generic route via generateStaticParams,
+    // so point search engines at the real page instead of indexing both.
+    alternates: { canonical: `${siteUrl}${getCourseUrl(params.slug)}` },
   };
 }
 
-export default function CourseDetailPage({ params }: Props) {
+export default async function CourseDetailPage({ params }: Props) {
+  // Courses with their own dedicated page (prenatal, postnatal, the
+  // retreat) shouldn't also serve this thinner generic template — send
+  // visitors (and crawlers) straight to the real page.
+  if (hasDedicatedPage(params.slug)) {
+    redirect(getCourseUrl(params.slug));
+  }
+
   const course = getCourseBySlug(params.slug);
   if (!course) notFound();
+
+  const siteImages = await listSiteImages().catch(
+    () => ({}) as Awaited<ReturnType<typeof listSiteImages>>,
+  );
+  const heroImage = siteImages[getCourseHeroSlotKey(course.slug)]?.url ?? course.image;
 
   return (
     <main className="pb-20 lg:pb-0">
@@ -34,7 +61,7 @@ export default function CourseDetailPage({ params }: Props) {
       <section className="relative min-h-[50vh] flex items-end w-full overflow-hidden">
         <div
           className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: `url(${course.image})` }}
+          style={{ backgroundImage: `url(${heroImage})` }}
           aria-hidden
         />
         <div className="absolute inset-0 bg-gradient-to-t from-charcoal-dark/90 via-charcoal-dark/50 to-charcoal/20" />
@@ -200,6 +227,16 @@ export default function CourseDetailPage({ params }: Props) {
           </aside>
         </div>
       </section>
+
+      {course.gallery && course.gallery.length > 0 && (
+        <GallerySection
+          title={`A glimpse into ${course.title}`}
+          items={course.gallery}
+          className="bg-beige-50"
+        />
+      )}
+
+      <CourseGallerySection courseSlug={course.slug} className="bg-white" />
 
       <Footer />
       <MobileEnrollBar title={course.title} price={course.price} formUrl={course.formUrl} />

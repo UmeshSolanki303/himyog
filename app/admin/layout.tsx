@@ -6,6 +6,9 @@ import { usePathname, useRouter } from "next/navigation";
 import {
   LayoutDashboard,
   MessageSquare,
+  Newspaper,
+  Images,
+  UserCircle,
   Users,
   LogOut,
   Menu,
@@ -23,7 +26,10 @@ interface CurrentUser {
 const NAV = [
   { href: "/admin/dashboard", label: "Dashboard",   icon: LayoutDashboard },
   { href: "/admin/reviews",   label: "Reviews",     icon: MessageSquare },
-  { href: "/admin/users",     label: "Users",       icon: Users, adminOnly: true },
+  { href: "/admin/blog",        label: "Blog",          icon: Newspaper },
+  { href: "/admin/gallery",     label: "Course Gallery", icon: Images },
+  { href: "/admin/site-images", label: "Site Photos",   icon: UserCircle },
+  { href: "/admin/users",       label: "Users",         icon: Users, adminOnly: true },
 ];
 
 function Sidebar({
@@ -106,13 +112,18 @@ function Sidebar({
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<CurrentUser | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const pathname = usePathname();
 
+  // This layout wraps the login page too, so it's already mounted (and
+  // fetched as logged-out) before a successful login client-side-navigates
+  // to /admin/dashboard. Re-running on every pathname change — not just on
+  // mount — is what picks up the new session without a manual refresh.
   useEffect(() => {
     fetch("/api/admin/me")
       .then((r) => r.ok ? r.json() : null)
-      .then((data) => { if (data) setUser(data); })
-      .catch(() => {});
-  }, []);
+      .then((data) => setUser(data ?? null))
+      .catch(() => setUser(null));
+  }, [pathname]);
 
   return (
     <div className="min-h-screen flex bg-beige-50 font-sans">

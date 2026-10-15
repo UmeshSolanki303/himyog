@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { PageHero } from "@/components/PageHero";
-import { ContentSection, ContentVideo } from "@/components/ContentSection";
+import { ContentSection, ContentImage } from "@/components/ContentSection";
 import { GallerySection } from "@/components/GallerySection";
 import { Footer } from "@/components/Footer";
 
@@ -115,8 +115,17 @@ export default function InformationSessionsPage() {
         </ul>
       </ContentSection>
 
-      <ContentSection title="Watch: Meet our educators" className="bg-white">
-        <ContentVideo src="" title="Meet our educators" />
+      <ContentSection title="A space to ask, and be heard" className="bg-white">
+        <p className="leading-relaxed">
+          No question is too small. Every session leaves time for open
+          conversation — so you walk away not just with information, but
+          with the reassurance of having been properly listened to.
+        </p>
+        <ContentImage
+          src="https://images.unsplash.com/photo-1573497491208-6b1acb260507?w=1200&q=80"
+          alt="Two women in an open, attentive conversation"
+          caption="Real conversations, not just a lecture"
+        />
       </ContentSection>
 
       <Footer />

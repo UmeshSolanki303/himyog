@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight, Clock, Monitor } from "lucide-react";
-import { courses } from "@/lib/courses";
+import { courses, getCourseUrl } from "@/lib/courses";
+import { getCourseHeroSlotKey } from "@/lib/site-images";
+import { listSiteImages } from "@/lib/admin-db";
 import { CtaButton } from "@/components/CtaButton";
 import { Footer } from "@/components/Footer";
 import { PageHero } from "@/components/PageHero";
@@ -12,7 +14,15 @@ export const metadata: Metadata = {
     "Explore our Preconception, Prenatal, Garbhsamskar, Postnatal, Pregnancy Wellness Retreat, TTC Yoga, and Meditation courses. Structured programs to support every stage of your journey.",
 };
 
-export default function CoursesPage() {
+// Real course photos can be added any time from /admin/site-images —
+// revalidate periodically rather than only at build time.
+export const revalidate = 60;
+
+export default async function CoursesPage() {
+  const siteImages = await listSiteImages().catch(
+    () => ({}) as Awaited<ReturnType<typeof listSiteImages>>,
+  );
+
   return (
     <main>
       <PageHero
@@ -32,7 +42,9 @@ export default function CoursesPage() {
                 <div className="relative aspect-[4/3] overflow-hidden shrink-0 group">
                   <div
                     className="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
-                    style={{ backgroundImage: `url(${course.image})` }}
+                    style={{
+                      backgroundImage: `url(${siteImages[getCourseHeroSlotKey(course.slug)]?.url ?? course.image})`,
+                    }}
                     aria-hidden
                   />
                   {course.badge && (
@@ -85,7 +97,7 @@ export default function CoursesPage() {
                   {/* CTA buttons */}
                   <div className="flex flex-col sm:flex-row gap-3 mt-auto">
                     <Link
-                      href={`/courses/${course.slug}`}
+                      href={getCourseUrl(course.slug)}
                       className="flex-1 inline-flex items-center justify-center gap-2 text-sm font-medium text-sage-600 border border-sage-300 hover:bg-sage-50 rounded-xl px-4 py-2.5 transition-colors"
                     >
                       Course Details

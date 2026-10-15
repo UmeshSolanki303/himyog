@@ -5,7 +5,13 @@ import { TeamSection } from "@/components/TeamSection";
 import { ClassSection } from "@/components/ClassSection";
 import { CoursesSection } from "@/components/CoursesSection";
 import { ReviewSection } from "@/components/ReviewSection";
+import { LocationMap } from "@/components/LocationMap";
 import { Footer } from "@/components/Footer";
+import { listSiteImages } from "@/lib/admin-db";
+
+// Real course photos can be added any time from /admin/site-images —
+// revalidate periodically rather than only at build time.
+export const revalidate = 60;
 
 // Placeholder URLs — replace with your Google Form links when ready
 const PRENATAL_FORM_URL =
@@ -13,13 +19,17 @@ const PRENATAL_FORM_URL =
 const POSTNATAL_FORM_URL =
   "https://docs.google.com/forms/d/e/1FAIpQLSfOv0nEZtvy7STdbX3XeIt8RXnDyW7fBjANWpOugaTzv6Pzng/viewform?usp=preview";
 
-export default function Home() {
+export default async function Home() {
+  const siteImages = await listSiteImages().catch(
+    () => ({}) as Awaited<ReturnType<typeof listSiteImages>>,
+  );
+
   return (
     <main>
       <Hero />
       <CardsSection />
       <Benefits />
-      <CoursesSection />
+      <CoursesSection siteImages={siteImages} />
       <TeamSection />
       <ClassSection
         id="prenatal"
@@ -56,6 +66,11 @@ export default function Home() {
         ctaText="Opens in a new tab"
       />
       <ReviewSection />
+      <LocationMap
+        title="Visit Us in Rishikesh"
+        description="Classes run online, pan-India — but our home studio is in the yoga capital of the world."
+        className="bg-beige-50"
+      />
       <Footer />
     </main>
   );

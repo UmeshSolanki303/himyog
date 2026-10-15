@@ -1,15 +1,9 @@
 import type { Metadata } from "next";
 import { Playfair_Display, Source_Sans_3 } from "next/font/google";
 import { Header } from "@/components/Header";
-import { courses } from "@/lib/courses";
+import { FloatingWriteReviewButton } from "@/components/WriteReviewButton";
+import { courses, getCourseUrl } from "@/lib/courses";
 import "./globals.css";
-
-// Prenatal/postnatal have dedicated marketing pages; every other course
-// resolves to its generic /courses/[slug] detail page.
-const DEDICATED_COURSE_URLS: Record<string, string> = {
-  "prenatal-yoga": "/prenatal",
-  "postnatal-yoga": "/postnatal",
-};
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
@@ -137,7 +131,7 @@ const jsonLd = {
       name: course.title,
       description: course.shortDescription,
       provider: { "@id": `${siteUrl}/#organization` },
-      url: `${siteUrl}${DEDICATED_COURSE_URLS[course.slug] ?? `/courses/${course.slug}`}`,
+      url: `${siteUrl}${getCourseUrl(course.slug)}`,
     })),
     {
       "@type": "Service",
@@ -167,6 +161,7 @@ export default function RootLayout({
       <body className="font-sans min-h-screen flex flex-col w-full">
         <Header />
         <div className="flex-1 pt-[var(--header-height)]">{children}</div>
+        <FloatingWriteReviewButton />
       </body>
     </html>
   );

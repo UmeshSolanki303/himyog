@@ -1,3 +1,10 @@
+export interface CourseGalleryItem {
+  src: string;
+  alt: string;
+  caption: string;
+  description?: string;
+}
+
 export interface Course {
   slug: string;
   title: string;
@@ -13,6 +20,10 @@ export interface Course {
   curriculum: string[];
   formUrl: string;
   price: string;
+  // Curated mood/theme imagery — not photos of real students. See
+  // CourseGallerySection (and /admin/gallery) for real, admin-uploaded
+  // photos, which render separately and take priority where they exist.
+  gallery?: CourseGalleryItem[];
 }
 
 const ENROLL_FORM_URL =
@@ -46,6 +57,44 @@ export const courses: Course[] = [
       "Understanding your cycle and fertile window",
       "Nutrition and Ayurvedic guidance for conception",
       "Mind-body practices to release fear and build hope",
+    ],
+    gallery: [
+      {
+        src: "https://images.unsplash.com/photo-1549062572-b4280938a25f?w=600&q=80",
+        alt: "Couple sharing a close, warm moment",
+        caption: "Preparing together",
+        description: "Optional couples sessions make this a shared journey, not a solitary one.",
+      },
+      {
+        src: "https://images.unsplash.com/photo-1617788472008-1e524a74cf25?w=600&q=80",
+        alt: "Couple watching the sunset together",
+        caption: "Space to process it all",
+        description: "Trying to conceive brings up a lot — our sessions make room for the emotional side, not just the physical.",
+      },
+      {
+        src: "https://images.unsplash.com/photo-1500771967326-9b2f6200d1c6?w=600&q=80",
+        alt: "Couple laughing together outdoors",
+        caption: "Hope held lightly",
+        description: "A warm, judgement-free space for wherever you are in the journey — just starting, or further along.",
+      },
+      {
+        src: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=600&q=80",
+        alt: "Gentle fertility-supportive yoga movement",
+        caption: "Gentle, fertility-supportive movement",
+        description: "Restorative asanas and breathwork to regulate stress and support hormonal balance.",
+      },
+      {
+        src: "https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=600&q=80",
+        alt: "A calm space for restorative practice",
+        caption: "Rest as part of the practice",
+        description: "Nervous-system regulation is as much a part of preconception care as any asana.",
+      },
+      {
+        src: "https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=600&q=80",
+        alt: "A nourishing, colourful bowl of fresh food",
+        caption: "Nutrition and Ayurvedic guidance",
+        description: "Lifestyle and nutrition guidance woven into the program, grounded in Ayurvedic tradition.",
+      },
     ],
     formUrl: ENROLL_FORM_URL,
     price: "Contact for pricing",
@@ -108,6 +157,44 @@ export const courses: Course[] = [
       "Mantra, bhajan, and sound healing for bonding",
       "Ayurvedic nutrition and lifestyle across trimesters",
       "Meditation, visualisation, and positive affirmations",
+    ],
+    gallery: [
+      {
+        src: "https://images.unsplash.com/photo-1761658883805-e2baf8795b88?w=600&q=80",
+        alt: "Women in traditional attire performing a coconut ritual with incense",
+        caption: "Rooted in tradition",
+        description: "Rituals passed down through generations, held with the same care today.",
+      },
+      {
+        src: "https://images.unsplash.com/photo-1605292356183-a77d0a9c9d1d?w=600&q=80",
+        alt: "Hands cupping a lit clay diya",
+        caption: "A sacred, quiet light",
+        description: "Small rituals that ground the practice — mantra, sound, and intention held together.",
+      },
+      {
+        src: "https://images.unsplash.com/photo-1577083753695-e010191bacb5?w=600&q=80",
+        alt: "Diyas and flower petals arranged for a ritual",
+        caption: "Ceremony and sound healing",
+        description: "Bhajan and sound healing woven into the program, for bonding with your baby.",
+      },
+      {
+        src: "https://images.unsplash.com/photo-1602305362475-17c5fd62d2e3?w=600&q=80",
+        alt: "Two clay diyas lit against a dark background",
+        caption: "Dinacharya — a sacred daily rhythm",
+        description: "Ayurvedic daily-routine guidance to create a calm, positive environment for your baby.",
+      },
+      {
+        src: "https://images.unsplash.com/photo-1624013599822-1faf520c67d1?w=600&q=80",
+        alt: "Pregnant woman in a meditative prayer pose",
+        caption: "Meditation and visualisation",
+        description: "Guided meditation and positive affirmations, held with warmth throughout pregnancy.",
+      },
+      {
+        src: "https://images.unsplash.com/photo-1457342813143-a1ae27448a82?w=600&q=80",
+        alt: "Pregnant woman gently cradling her belly",
+        caption: "Nurturing body, mind, and spirit",
+        description: "A calm, sacred environment for your baby's development, at every stage.",
+      },
     ],
     formUrl: ENROLL_FORM_URL,
     price: "Contact for pricing",
@@ -234,6 +321,44 @@ export const courses: Course[] = [
       "Building a sustainable home meditation practice",
       "Meditation for emotional balance through life transitions",
     ],
+    gallery: [
+      {
+        src: "https://images.unsplash.com/photo-1522075782449-e45a34f1ddfb?w=600&q=80",
+        alt: "Person meditating on a bench at sunset overlooking hills",
+        caption: "Stillness, wherever you find it",
+        description: "A personal practice that travels with you — on a bench, a mat, or a quiet corner of home.",
+      },
+      {
+        src: "https://images.unsplash.com/photo-1602192509154-0b900ee1f851?w=600&q=80",
+        alt: "Woman meditating cross-legged on a grassy hill",
+        caption: "Breath-awareness meditation",
+        description: "Guided mindfulness practices to build focus and calm, one session at a time.",
+      },
+      {
+        src: "https://images.unsplash.com/photo-1526916027372-0c0852cef5d3?w=600&q=80",
+        alt: "Person sitting in meditation overlooking mountains",
+        caption: "Open to everyone",
+        description: "Mothers, students, and anyone seeking stillness — this space is for all of it.",
+      },
+      {
+        src: "https://images.unsplash.com/photo-1461468611824-46457c0e11fd?w=600&q=80",
+        alt: "Person meditating by the ocean at sunset",
+        caption: "Yoga nidra and deep rest",
+        description: "Practices for nervous-system recovery, adaptable for pregnancy, postpartum, or everyday life.",
+      },
+      {
+        src: "https://images.unsplash.com/photo-1517021897933-0e0319cfbc28?w=600&q=80",
+        alt: "A calm, guided meditation session",
+        caption: "Pranayama for calm and focus",
+        description: "Breathwork techniques that build a sustainable, personal meditation practice over time.",
+      },
+      {
+        src: "https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=600&q=80",
+        alt: "A calm space for restorative practice",
+        caption: "Emotional balance through transitions",
+        description: "A quiet, supportive space held for you through whatever life stage you're navigating.",
+      },
+    ],
     formUrl: ENROLL_FORM_URL,
     price: "Contact for pricing",
   },
@@ -241,4 +366,22 @@ export const courses: Course[] = [
 
 export function getCourseBySlug(slug: string): Course | undefined {
   return courses.find((c) => c.slug === slug);
+}
+
+// Courses with their own dedicated, richer page (instead of the generic
+// /courses/[slug] template) — the single source of truth so every link,
+// the sitemap, and the JSON-LD Service URLs all agree on where a course
+// actually lives.
+const DEDICATED_COURSE_URLS: Record<string, string> = {
+  "prenatal-yoga": "/prenatal",
+  "postnatal-yoga": "/postnatal",
+  "pregnancy-wellness": "/retreat",
+};
+
+export function getCourseUrl(slug: string): string {
+  return DEDICATED_COURSE_URLS[slug] ?? `/courses/${slug}`;
+}
+
+export function hasDedicatedPage(slug: string): boolean {
+  return slug in DEDICATED_COURSE_URLS;
 }
