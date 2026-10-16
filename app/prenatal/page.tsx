@@ -5,6 +5,8 @@ import { GallerySection } from "@/components/GallerySection";
 import { CourseGallerySection } from "@/components/CourseGallerySection";
 import { Footer } from "@/components/Footer";
 import { listSiteImages } from "@/lib/admin-db";
+import { FaqSection, type Faq } from "@/components/FaqSection";
+import { pageMetadata, PAGE_SEO } from "@/lib/seo";
 
 // Real gallery photos can be added any time from /admin/gallery — revalidate
 // periodically rather than only at build time, or newly uploaded photos
@@ -56,17 +58,34 @@ const PRENATAL_GALLERY_ITEMS = [
   },
 ];
 
-export const metadata: Metadata = {
-  title: "Prenatal Yoga",
-  description:
-    "Safe prenatal yoga for every trimester. Ease discomfort, build strength, and prepare for birth with expert-led classes. Gentle movement, breathwork, and relaxation for pregnancy.",
-  openGraph: {
-    title: "Prenatal Yoga | Him Yoga",
-    description:
-      "Safe prenatal yoga for every trimester. Gentle movement, breathwork, and preparation for birth in a supportive environment.",
-    url: "/prenatal",
+export const metadata: Metadata = pageMetadata(PAGE_SEO.prenatal);
+
+const PRENATAL_FAQS: Faq[] = [
+  {
+    q: "Is prenatal yoga safe in the first trimester?",
+    a: "Yes, for most healthy pregnancies. First-trimester classes focus on gentle movement, breathwork and rest, and we avoid deep twists, hot rooms and strong core work. Always check with your doctor before starting, especially if your pregnancy is high-risk.",
   },
-};
+  {
+    q: "When should I start pregnancy yoga?",
+    a: "You can start in any trimester. Many mothers begin after the first-trimester scan, but each class is adapted to your stage, so it is never too late to join — even in the third trimester.",
+  },
+  {
+    q: "Can prenatal yoga help with a normal delivery?",
+    a: "Prenatal yoga builds strength, flexibility, pelvic floor awareness and breathing techniques that many mothers find helpful during labour. It can't guarantee a particular type of birth, but it helps you feel prepared and confident.",
+  },
+  {
+    q: "Are your prenatal yoga classes online or in person?",
+    a: "Both. Join live online pregnancy yoga classes from anywhere in India, or attend in person at our studio in Muni Ki Reti, Rishikesh.",
+  },
+  {
+    q: "Do I need yoga experience to join?",
+    a: "No. Our prenatal classes are designed for complete beginners as well as experienced practitioners, with modifications offered for every pose.",
+  },
+  {
+    q: "Can prenatal yoga ease back pain during pregnancy?",
+    a: "Gentle stretches, posture work and strengthening for the hips and back can ease the lower back and pelvic discomfort common in pregnancy. Let your instructor know about any pain so poses can be adapted for you.",
+  },
+];
 
 // Replace with your image path (/hero-prenatal.jpg) or external URL
 const HERO_IMAGE =
@@ -81,17 +100,19 @@ export default async function PrenatalPage() {
     <main>
       <PageHero
         title="Prenatal Yoga"
-        description="Safe, gentle yoga for every trimester. Ease discomfort, build strength, and prepare your body and mind for birth in a supportive environment."
+        description="Safe, gentle pregnancy yoga for every trimester — live online across India and in person in Rishikesh. Ease discomfort, build strength, and prepare your body and mind for birth."
         imageSrc={siteImages["prenatal-hero"]?.url ?? HERO_IMAGE}
       />
-      <ContentSection title="What to expect" className="bg-beige-50">
+      <ContentSection title="What to expect in our prenatal yoga classes" className="bg-beige-50">
         <p className="leading-relaxed mb-6">
-          Our prenatal classes are designed to support you through each
+          Our prenatal yoga classes are designed to support you through each
           trimester with safe, adapted poses that ease common discomforts, build
           strength, and prepare your body and mind for birth. All classes are
           suitable for beginners and experienced practitioners alike. You will
           learn breathwork, pelvic floor awareness, and relaxation techniques
-          that support labour and recovery.
+          that support labour and recovery. Join live online pregnancy yoga
+          classes from anywhere in India, or practise with us in person in
+          Rishikesh, the yoga capital of the world.
         </p>
         <p className="leading-relaxed">
           Classes focus on gentle strength and flexibility to ease back pain and
@@ -107,7 +128,7 @@ export default async function PrenatalPage() {
         className="bg-beige-50"
       />
 
-      <ContentSection title="Safe for all trimesters" className="bg-white">
+      <ContentSection title="Safe yoga for the first, second and third trimester" className="bg-white">
         <p className="leading-relaxed mb-6">
           Whether you are in your first, second, or third trimester, our
           instructors provide appropriate modifications and alternatives. We
@@ -148,6 +169,8 @@ export default async function PrenatalPage() {
       </ContentSection>
 
       <CourseGallerySection courseSlug="prenatal-yoga" className="bg-white" />
+
+      <FaqSection faqs={PRENATAL_FAQS} title="Prenatal Yoga FAQs" />
 
       <Footer />
     </main>

@@ -7,7 +7,7 @@ import {
   insertBlogPost,
   type AdminBlogPost,
 } from "@/lib/admin-db";
-import { slugify, deriveExcerpt } from "@/lib/blog-utils";
+import { slugify, deriveExcerpt, dedupeKeywords } from "@/lib/blog-utils";
 
 // GET — list all blog posts, any status (requires read)
 export async function GET(request: NextRequest) {
@@ -43,6 +43,8 @@ export async function POST(request: NextRequest) {
     status,
     seoTitle,
     seoDescription,
+    focusKeyword,
+    seoKeywords,
   } = body;
 
   if (!title || !content) {
@@ -68,6 +70,8 @@ export async function POST(request: NextRequest) {
     status: postStatus,
     seoTitle: seoTitle || undefined,
     seoDescription: seoDescription || undefined,
+    focusKeyword: focusKeyword?.trim() || undefined,
+    seoKeywords: Array.isArray(seoKeywords) ? dedupeKeywords(seoKeywords) : [],
     publishedAt: postStatus === "published" ? now : undefined,
     createdAt: now,
     updatedAt: now,

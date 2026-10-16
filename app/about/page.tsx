@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMetadata, PAGE_SEO } from "@/lib/seo";
 import Link from "next/link";
 import {
   Heart,
@@ -35,12 +36,7 @@ const ENROLL_FORM_URL =
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://matrushaktiyog.com";
 
-export const metadata: Metadata = {
-  title: "About Us",
-  description:
-    "Matrushakti Yog nurtures mothers through every stage of motherhood — from preconception to postpartum — with safe, expert-led prenatal & postnatal yoga. Based in Rishikesh, the yoga capital of the world.",
-  alternates: { canonical: `${siteUrl}/about` },
-};
+export const metadata: Metadata = pageMetadata(PAGE_SEO.about);
 
 // Each element of the logo read against its documented meaning in yogic and
 // Hindu iconography — not a claim about the designer's own notes, but the

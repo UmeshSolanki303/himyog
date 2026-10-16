@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMetadata, PAGE_SEO } from "@/lib/seo";
 import Link from "next/link";
 import { ArrowRight, Calendar, Clock } from "lucide-react";
 import { listPublishedBlogPosts } from "@/lib/admin-db";
@@ -11,11 +12,20 @@ import { Footer } from "@/components/Footer";
 // freezing on whatever was published at build/deploy time.
 export const revalidate = 60;
 
-export const metadata: Metadata = {
-  title: "Blog",
-  description:
-    "Articles on prenatal and postnatal yoga, pregnancy wellness, and motherhood from the Matrushakti Yog team — practical guidance for every stage of the journey.",
-};
+export async function generateMetadata({
+  searchParams,
+}: {
+  searchParams: Promise<{ tag?: string }>;
+}): Promise<Metadata> {
+  const { tag } = await searchParams;
+  // Tag-filtered views are the same listing — pageMetadata always points the
+  // canonical at /blog so search engines don't index near-duplicate pages.
+  return pageMetadata({
+    ...PAGE_SEO.blog,
+    title: tag ? `${tag} Articles` : PAGE_SEO.blog.title,
+    keywords: tag ? [tag, ...PAGE_SEO.blog.keywords] : PAGE_SEO.blog.keywords,
+  });
+}
 
 function formatDate(iso: string) {
   return new Date(iso).toLocaleDateString("en-IN", {

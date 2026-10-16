@@ -1,20 +1,11 @@
 import type { Metadata } from "next";
+import { pageMetadata, PAGE_SEO } from "@/lib/seo";
 import { PageHero } from "@/components/PageHero";
 import { ContentSection, ContentImage } from "@/components/ContentSection";
 import { GallerySection } from "@/components/GallerySection";
 import { Footer } from "@/components/Footer";
 
-export const metadata: Metadata = {
-  title: "Information Sessions",
-  description:
-    "Expert-led sessions on pregnancy, birth, and postpartum. Tips on labour, breastfeeding, newborn care, and the fourth trimester. Support for every stage.",
-  openGraph: {
-    title: "Information Sessions | Him Yoga",
-    description:
-      "Expert-led sessions on pregnancy, birth, and postpartum. Tips, guidance, and support for every stage of your journey.",
-    url: "/information-sessions",
-  },
-};
+export const metadata: Metadata = pageMetadata(PAGE_SEO.informationSessions);
 
 const HERO_IMAGE =
   "https://images.unsplash.com/photo-1555252333-9f8e92e65df9?w=1600&q=80";

@@ -73,7 +73,6 @@ const COURSE_LINKS = [
 
 const NAV_LINKS = [
   { href: "/about", label: "About" },
-  { href: "/reviews", label: "Reviews" },
   { href: "/blog", label: "Blog" },
   { href: "/contact", label: "Contact" },
 ];

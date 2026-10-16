@@ -5,10 +5,10 @@ import { useSearchParams } from "next/navigation";
 import { marked } from "marked";
 import {
   Plus, Pencil, Trash2, Loader2, X, Save, Eye, EyeOff,
-  CheckCircle2, FileEdit,
+  CheckCircle2, FileEdit, Circle,
 } from "lucide-react";
 import type { AdminBlogPost } from "@/lib/admin-db";
-import { slugify, deriveExcerpt, readingTime } from "@/lib/blog-utils";
+import { slugify, deriveExcerpt, readingTime, parseKeywords, seoChecks } from "@/lib/blog-utils";
 
 const STATUS_OPTIONS = ["draft", "published"] as const;
 
@@ -34,12 +34,23 @@ interface FormState {
   status: "draft" | "published";
   seoTitle: string;
   seoDescription: string;
+  focusKeyword: string;
+  seoKeywords: string;
+}
+
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://matrushaktiyog.com";
+
+function CharCount({ value, min, max }: { value: string; min: number; max: number }) {
+  const n = value.length;
+  const tone = n === 0 ? "text-slate-soft" : n < min || n > max ? "text-gold-600" : "text-warm-sage-600";
+  return <span className={`text-[11px] ${tone}`}>{n}/{max}</span>;
 }
 
 function defaultForm(): FormState {
   return {
     title: "", slug: "", excerpt: "", content: "", coverImage: "", author: "",
     tags: "", status: "draft", seoTitle: "", seoDescription: "",
+    focusKeyword: "", seoKeywords: "",
   };
 }
 
@@ -60,6 +71,7 @@ function PostModal({
           content: post.content, coverImage: post.coverImage ?? "",
           author: post.author, tags: post.tags.join(", "), status: post.status,
           seoTitle: post.seoTitle ?? "", seoDescription: post.seoDescription ?? "",
+          focusKeyword: post.focusKeyword ?? "", seoKeywords: (post.seoKeywords ?? []).join(", "),
         }
       : defaultForm(),
   );
@@ -92,6 +104,8 @@ function PostModal({
       status: form.status,
       seoTitle: form.seoTitle,
       seoDescription: form.seoDescription,
+      focusKeyword: form.focusKeyword,
+      seoKeywords: parseKeywords(form.seoKeywords),
     };
 
     try {
@@ -214,17 +228,37 @@ function PostModal({
             </p>
           </div>
 
-          <details className="group">
+          <details className="group rounded-xl border border-sage-100 bg-beige-50/60 px-4 py-3" open>
             <summary className="text-xs font-semibold uppercase tracking-wide text-sage-600 cursor-pointer select-none">
-              SEO overrides (optional)
+              SEO &amp; keywords
             </summary>
-            <div className="mt-3 flex flex-col gap-3">
+            <div className="mt-4 flex flex-col gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label className={labelCls}>Focus keyword</label>
+                  <input name="focusKeyword" value={form.focusKeyword} onChange={handle} className={inputCls} placeholder="prenatal yoga first trimester" />
+                </div>
+                <div>
+                  <label className={labelCls}>Other keywords</label>
+                  <input name="seoKeywords" value={form.seoKeywords} onChange={handle} className={inputCls} placeholder="pregnancy yoga, safe poses, rishikesh" />
+                </div>
+              </div>
+              <p className="text-[11px] text-slate-soft -mt-2">
+                Comma-separated. Focus keyword, keywords, and tags are all added to the page&apos;s meta keywords and structured data.
+              </p>
+
               <div>
-                <label className={labelCls}>SEO title</label>
+                <div className="flex items-center justify-between mb-1.5">
+                  <label className={labelCls + " mb-0"}>SEO title</label>
+                  <CharCount value={form.seoTitle || form.title} min={30} max={60} />
+                </div>
                 <input name="seoTitle" value={form.seoTitle} onChange={handle} className={inputCls} placeholder={form.title || "Defaults to the post title"} />
               </div>
               <div>
-                <label className={labelCls}>SEO description</label>
+                <div className="flex items-center justify-between mb-1.5">
+                  <label className={labelCls + " mb-0"}>Meta description</label>
+                  <CharCount value={form.seoDescription || form.excerpt || deriveExcerpt(form.content)} min={70} max={160} />
+                </div>
                 <textarea
                   name="seoDescription"
                   value={form.seoDescription}
@@ -232,9 +266,44 @@ function PostModal({
                   rows={2}
                   maxLength={160}
                   className={`${inputCls} resize-none`}
-                  placeholder={deriveExcerpt(form.content || form.excerpt || "Defaults to the excerpt")}
+                  placeholder={form.excerpt || deriveExcerpt(form.content) || "Defaults to the excerpt"}
                 />
               </div>
+
+              {/* Google result preview */}
+              <div className="rounded-xl bg-white border border-sage-100 px-4 py-3">
+                <p className="text-[10px] font-semibold uppercase tracking-wide text-slate-soft mb-2">Search preview</p>
+                <p className="text-xs text-charcoal/60 truncate">{siteUrl.replace(/^https?:\/\//, "")} › blog › {form.slug || "your-post-slug"}</p>
+                <p className="text-[#1a0dab] text-base leading-snug truncate">
+                  {(form.seoTitle || form.title || "Post title") + " | Matrushakti Yog"}
+                </p>
+                <p className="text-xs text-charcoal/70 leading-relaxed line-clamp-2">
+                  {form.seoDescription || form.excerpt || deriveExcerpt(form.content) || "Meta description will appear here."}
+                </p>
+              </div>
+
+              {/* On-page checklist */}
+              {(() => {
+                const checks = seoChecks(form);
+                const passed = checks.filter((c) => c.ok).length;
+                return (
+                  <div>
+                    <p className="text-[10px] font-semibold uppercase tracking-wide text-slate-soft mb-2">
+                      SEO checklist · {passed}/{checks.length}
+                    </p>
+                    <ul className="flex flex-col gap-1">
+                      {checks.map((c) => (
+                        <li key={c.label} className={`flex items-start gap-2 text-xs ${c.ok ? "text-warm-sage-700" : "text-charcoal/60"}`}>
+                          {c.ok
+                            ? <CheckCircle2 className="w-3.5 h-3.5 shrink-0 mt-px text-warm-sage-500" />
+                            : <Circle className="w-3.5 h-3.5 shrink-0 mt-px text-slate-soft" />}
+                          {c.label}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                );
+              })()}
             </div>
           </details>
 

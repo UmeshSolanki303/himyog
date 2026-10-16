@@ -115,7 +115,7 @@ export function Hero() {
               }}
             />
             <span className="text-sage-600 text-[11px] sm:text-xs font-semibold uppercase tracking-[0.2em]">
-              Prenatal &amp; Postnatal Yoga
+              Prenatal &amp; Postnatal Yoga · Rishikesh &amp; Online
             </span>
           </motion.div>
 
@@ -163,8 +163,9 @@ export function Hero() {
             }}
             className="mt-4 sm:mt-5 text-base sm:text-lg text-charcoal/70 font-sans leading-relaxed text-left max-w-md"
           >
-            Find balance, strength, and peace with prenatal and postnatal yoga
-            designed for every stage of your journey.
+            Find balance, strength, and peace with prenatal and postnatal yoga,
+            Garbh Sanskar, and postpartum recovery — live online across India
+            and in person in Rishikesh.
           </motion.p>
 
           {/* CTA buttons */}

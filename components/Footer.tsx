@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { motion } from "framer-motion";
 import { Mail, Phone, MapPin, Instagram, Facebook } from "lucide-react";
 
@@ -15,6 +16,13 @@ const socialLinks = [
     href: "https://www.instagram.com/_matrushakti_yog_/",
   },
   { icon: Facebook, label: "Facebook", href: "#" },
+];
+
+const footerLinks = [
+  { href: "/about", label: "About" },
+  { href: "/reviews", label: "Reviews" },
+  { href: "/blog", label: "Blog" },
+  { href: "/contact", label: "Contact" },
 ];
 
 export function Footer() {
@@ -94,6 +102,17 @@ export function Footer() {
           transition={{ duration: 0.5, delay: 0.15 }}
           className="mt-10 pt-8 border-t border-charcoal/10 text-center text-charcoal/40 text-xs sm:text-sm"
         >
+          <nav aria-label="Footer" className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 mb-4">
+            {footerLinks.map(({ href, label }) => (
+              <Link
+                key={href}
+                href={href}
+                className="text-charcoal/70 hover:text-sage-600 text-sm transition-colors"
+              >
+                {label}
+              </Link>
+            ))}
+          </nav>
           <p>
             © {new Date().getFullYear()} Matrushakti Yog. All rights reserved.
           </p>

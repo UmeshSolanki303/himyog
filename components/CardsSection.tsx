@@ -12,7 +12,7 @@ const cards = [
       "Safe, gentle yoga for every trimester. Ease discomfort, build strength, and prepare your body and mind for birth.",
     href: "/prenatal",
     image:
-      "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=600&q=80",
+      "https://images.pexels.com/photos/33755457/pexels-photo-33755457.jpeg?auto=compress&cs=tinysrgb&w=800",
   },
   {
     title: "Postnatal Yoga",
@@ -20,7 +20,7 @@ const cards = [
       "Recover and rebuild with pelvic floor and core focus. Baby-and-me classes so you can bond while you move.",
     href: "/postnatal",
     image:
-      "https://images.unsplash.com/photo-1587668178277-295251f900ce?w=600&q=80",
+      "https://images.pexels.com/photos/4457938/pexels-photo-4457938.jpeg?auto=compress&cs=tinysrgb&w=800",
   },
   {
     title: "Information Sessions",
@@ -28,7 +28,7 @@ const cards = [
       "Expert-led sessions on pregnancy, birth, and postpartum. Tips, guidance, and support for every stage.",
     href: "/information-sessions",
     image:
-      "https://images.unsplash.com/photo-1555252333-9f8e92e65df9?w=600&q=80",
+      "https://images.pexels.com/photos/7089329/pexels-photo-7089329.jpeg?auto=compress&cs=tinysrgb&w=800",
   },
 ];
 

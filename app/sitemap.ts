@@ -2,6 +2,10 @@ import { MetadataRoute } from "next";
 import { courses, hasDedicatedPage, getCourseUrl } from "@/lib/courses";
 import { listPublishedBlogPosts } from "@/lib/admin-db";
 
+// Without this the sitemap is generated once at build time, so posts
+// published from /admin/blog afterwards would never reach search engines.
+export const revalidate = 3600;
+
 const baseUrl =
   process.env.NEXT_PUBLIC_SITE_URL || "https://matrushaktiyog.com";
 
@@ -19,6 +23,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }));
 
   let blogPages: MetadataRoute.Sitemap = [];
+  let blogLastModified = new Date();
   try {
     const posts = await listPublishedBlogPosts();
     blogPages = posts.map((p) => ({
@@ -27,6 +32,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "monthly",
       priority: 0.7,
     }));
+    if (posts.length) {
+      blogLastModified = new Date(Math.max(...posts.map((p) => new Date(p.updatedAt).getTime())));
+    }
   } catch {
     // DB unreachable at build time — sitemap still returns the static pages.
   }
@@ -76,7 +84,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
     {
       url: `${baseUrl}/blog`,
-      lastModified: new Date(),
+      lastModified: blogLastModified,
       changeFrequency: "weekly",
       priority: 0.8,
     },

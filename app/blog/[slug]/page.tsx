@@ -4,12 +4,13 @@ import Link from "next/link";
 import { marked } from "marked";
 import { ArrowLeft, Calendar, Clock, User } from "lucide-react";
 import { findBlogPostBySlug, listPublishedBlogPosts } from "@/lib/admin-db";
-import { readingTime } from "@/lib/blog-utils";
+import { readingTime, postKeywords, wordCount } from "@/lib/blog-utils";
 import { Footer } from "@/components/Footer";
 
 export const revalidate = 60;
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://matrushaktiyog.com";
+const BRAND = "Matrushakti Yog";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -28,25 +29,36 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const title = post.seoTitle || post.title;
   const description = post.seoDescription || post.excerpt;
+  const url = `${siteUrl}/blog/${post.slug}`;
+  const keywords = postKeywords(post);
+  const images = post.coverImage ? [{ url: post.coverImage, alt: post.title }] : undefined;
 
   return {
     title,
     description,
-    alternates: { canonical: `${siteUrl}/blog/${post.slug}` },
+    keywords: keywords.length ? keywords : undefined,
+    authors: [{ name: post.author }],
+    alternates: { canonical: url },
+    robots: { index: true, follow: true, "max-image-preview": "large" },
     openGraph: {
       type: "article",
+      siteName: BRAND,
+      locale: "en_IN",
       title,
       description,
-      url: `${siteUrl}/blog/${post.slug}`,
+      url,
       publishedTime: post.publishedAt,
       modifiedTime: post.updatedAt,
-      tags: post.tags,
-      images: post.coverImage ? [{ url: post.coverImage, alt: post.title }] : undefined,
+      authors: [post.author],
+      section: post.tags[0],
+      tags: keywords,
+      images,
     },
     twitter: {
       card: "summary_large_image",
       title,
       description,
+      images: post.coverImage ? [post.coverImage] : undefined,
     },
   };
 }
@@ -66,22 +78,42 @@ export default async function BlogPostPage({ params }: Props) {
 
   const html = marked.parse(post.content) as string;
 
+  const postUrl = `${siteUrl}/blog/${post.slug}`;
+  const keywords = postKeywords(post);
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
-    headline: post.title,
+    headline: post.seoTitle || post.title,
     description: post.seoDescription || post.excerpt,
     image: post.coverImage ? [post.coverImage] : undefined,
     datePublished: post.publishedAt ?? post.createdAt,
     dateModified: post.updatedAt,
-    author: { "@type": "Organization", name: "Matrushakti Yog" },
+    inLanguage: "en-IN",
+    wordCount: wordCount(post.content),
+    articleSection: post.tags[0],
+    // Guest/instructor bylines are people; the default byline is the brand.
+    author:
+      post.author === BRAND
+        ? { "@type": "Organization", name: BRAND, url: siteUrl }
+        : { "@type": "Person", name: post.author },
     publisher: {
       "@type": "Organization",
       name: "Matrushakti Yog",
-      logo: { "@type": "ImageObject", url: `${siteUrl}/logo-bk.png` },
+      logo: { "@type": "ImageObject", url: `${siteUrl}/images/logo-bk.png` },
     },
-    mainEntityOfPage: { "@type": "WebPage", "@id": `${siteUrl}/blog/${post.slug}` },
-    keywords: post.tags.join(", ") || undefined,
+    mainEntityOfPage: { "@type": "WebPage", "@id": postUrl },
+    keywords: keywords.join(", ") || undefined,
+  };
+
+  const breadcrumbLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: siteUrl },
+      { "@type": "ListItem", position: 2, name: "Blog", item: `${siteUrl}/blog` },
+      { "@type": "ListItem", position: 3, name: post.title, item: postUrl },
+    ],
   };
 
   // Lightweight related-posts: same first tag, excluding this post.
@@ -94,6 +126,10 @@ export default async function BlogPostPage({ params }: Props) {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }}
       />
 
       {/* Hero */}

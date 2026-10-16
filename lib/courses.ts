@@ -39,7 +39,7 @@ export const courses: Course[] = [
     level: "All levels — couples welcome",
     badge: "New",
     image:
-      "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=800&q=80",
+      "https://images.pexels.com/photos/6539883/pexels-photo-6539883.jpeg?auto=compress&cs=tinysrgb&w=1200",
     shortDescription:
       "Gentle yoga, breathwork, and lifestyle guidance to help you prepare your body, mind, and hormones before your conception journey begins.",
     description:
@@ -108,7 +108,7 @@ export const courses: Course[] = [
     level: "All levels — beginners welcome",
     badge: "Most Popular",
     image:
-      "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=800&q=80",
+      "https://images.pexels.com/photos/7055705/pexels-photo-7055705.jpeg?auto=compress&cs=tinysrgb&w=1200",
     shortDescription:
       "Gentle, adapted yoga to ease discomfort, build strength, and prepare your body and mind for birth — safe for all trimesters.",
     description:
@@ -133,13 +133,13 @@ export const courses: Course[] = [
   {
     slug: "garbhsamskar",
     title: "Garbhsamskar",
-    subtitle: "Ancient wisdom for a conscious pregnancy",
+    subtitle: "Garbh Sanskar — ancient Vedic wisdom for a conscious pregnancy",
     duration: "12-week program",
     format: "Live Online & In-Person",
     level: "All trimesters",
     badge: "Traditional",
     image:
-      "https://images.unsplash.com/photo-1545205597-3d9d02c29597?w=800&q=80",
+      "https://images.pexels.com/photos/38491534/pexels-photo-38491534.jpeg?auto=compress&cs=tinysrgb&w=1200",
     shortDescription:
       "A traditional Vedic practice blending yoga, mantra, meditation, and Ayurvedic guidance to nurture your baby's mind, body, and spirit in the womb.",
     description:
@@ -208,7 +208,7 @@ export const courses: Course[] = [
     level: "All levels",
     badge: "",
     image:
-      "https://images.unsplash.com/photo-1587668178277-295251f900ce?w=800&q=80",
+      "https://images.pexels.com/photos/9472300/pexels-photo-9472300.jpeg?auto=compress&cs=tinysrgb&w=1200",
     shortDescription:
       "Pelvic floor and core recovery, baby-and-me sessions, and gentle rebuilding of strength at your own pace after birth.",
     description:
@@ -239,7 +239,7 @@ export const courses: Course[] = [
     level: "All expectant & new parents",
     badge: "Free intro available",
     image:
-      "https://images.unsplash.com/photo-1555252333-9f8e92e65df9?w=800&q=80",
+      "https://images.pexels.com/photos/37709411/pexels-photo-37709411.jpeg?auto=compress&cs=tinysrgb&w=1200",
     shortDescription:
       "Expert-led wellness sessions and retreats on pregnancy, birth, breastfeeding, and the fourth trimester — knowledge and rest to navigate every stage with confidence.",
     description:
@@ -270,7 +270,7 @@ export const courses: Course[] = [
     level: "Intermediate practitioners",
     badge: "Limited Seats",
     image:
-      "https://images.unsplash.com/photo-1508672019048-805c876b67e2?w=800&q=80",
+      "https://images.pexels.com/photos/34513840/pexels-photo-34513840.jpeg?auto=compress&cs=tinysrgb&w=1200",
     shortDescription:
       "A comprehensive 200-hour Teacher Training Course specialising in prenatal and postnatal yoga — equipping you to guide mothers safely through every stage of their journey.",
     description:
@@ -302,7 +302,7 @@ export const courses: Course[] = [
     level: "All levels — open to everyone",
     badge: "",
     image:
-      "https://images.unsplash.com/photo-1517021897933-0e0319cfbc28?w=800&q=80",
+      "https://images.pexels.com/photos/32089502/pexels-photo-32089502.jpeg?auto=compress&cs=tinysrgb&w=1200",
     shortDescription:
       "Guided meditation and pranayama sessions for calm, clarity, and emotional balance — open to mothers, students, and anyone seeking stillness.",
     description:

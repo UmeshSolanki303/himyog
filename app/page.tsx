@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { Hero } from "@/components/Hero";
 import { CardsSection } from "@/components/CardsSection";
 import { Benefits } from "@/components/Benefits";
@@ -8,6 +9,14 @@ import { ReviewSection } from "@/components/ReviewSection";
 import { LocationMap } from "@/components/LocationMap";
 import { Footer } from "@/components/Footer";
 import { listSiteImages } from "@/lib/admin-db";
+import { pageMetadata, PAGE_SEO } from "@/lib/seo";
+
+// Homepage keeps the brand-first default title from the root layout, but
+// needs its own canonical/keywords now that the layout no longer sets them.
+export const metadata: Metadata = {
+  ...pageMetadata(PAGE_SEO.home),
+  title: { absolute: `Matrushakti Yog | ${PAGE_SEO.home.title}` },
+};
 
 // Real course photos can be added any time from /admin/site-images —
 // revalidate periodically rather than only at build time.

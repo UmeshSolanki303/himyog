@@ -18,6 +18,7 @@ import { GallerySection } from "@/components/GallerySection";
 import { CourseGallerySection } from "@/components/CourseGallerySection";
 import { LocationMap } from "@/components/LocationMap";
 import { RetreatInquiryForm } from "@/components/RetreatInquiryForm";
+import { pageMetadata, COURSE_SEO } from "@/lib/seo";
 
 // Real gallery photos can be added any time from /admin/gallery — revalidate
 // periodically rather than only at build time, or newly uploaded photos
@@ -102,17 +103,11 @@ const FAQS = [
   },
 ];
 
-export const metadata: Metadata = {
-  title: course.title,
-  description: course.shortDescription,
-  alternates: { canonical: `${siteUrl}/retreat` },
-  openGraph: {
-    title: `${course.title} | Matrushakti Yog`,
-    description: course.shortDescription,
-    url: `${siteUrl}/retreat`,
-    images: [{ url: course.image, width: 800, height: 600, alt: course.title }],
-  },
-};
+export const metadata: Metadata = pageMetadata({
+  path: "/retreat",
+  ...COURSE_SEO["pregnancy-wellness"],
+  image: course.image,
+});
 
 const jsonLd = {
   "@context": "https://schema.org",

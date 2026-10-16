@@ -10,8 +10,7 @@ import { MobileEnrollBar } from "@/components/MobileEnrollBar";
 import { GallerySection } from "@/components/GallerySection";
 import { CourseGallerySection } from "@/components/CourseGallerySection";
 import { listSiteImages } from "@/lib/admin-db";
-
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://matrushaktiyog.com";
+import { pageMetadata, COURSE_SEO } from "@/lib/seo";
 
 // Real gallery photos can be added any time from /admin/gallery — revalidate
 // periodically rather than only at build time, or newly uploaded photos
@@ -29,14 +28,17 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const course = getCourseBySlug(params.slug);
   if (!course) return {};
-  return {
-    title: course.title,
-    description: course.shortDescription,
-    // Courses with a dedicated, richer page (prenatal, postnatal, the
-    // retreat) still generate this generic route via generateStaticParams,
-    // so point search engines at the real page instead of indexing both.
-    alternates: { canonical: `${siteUrl}${getCourseUrl(params.slug)}` },
-  };
+  const seo = COURSE_SEO[course.slug];
+  // Courses with a dedicated, richer page (prenatal, postnatal, the
+  // retreat) still generate this generic route via generateStaticParams,
+  // so pageMetadata points the canonical at the real page via getCourseUrl.
+  return pageMetadata({
+    path: getCourseUrl(params.slug),
+    title: seo?.title ?? course.title,
+    description: seo?.description ?? course.shortDescription,
+    keywords: seo?.keywords ?? [],
+    image: course.image,
+  });
 }
 
 export default async function CourseDetailPage({ params }: Props) {

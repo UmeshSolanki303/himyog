@@ -7,7 +7,7 @@ import {
   generateUniqueBlogSlug,
   type AdminBlogPost,
 } from "@/lib/admin-db";
-import { slugify, deriveExcerpt } from "@/lib/blog-utils";
+import { slugify, deriveExcerpt, dedupeKeywords } from "@/lib/blog-utils";
 
 // PUT — update a blog post
 export async function PUT(
@@ -47,6 +47,9 @@ export async function PUT(
     seoTitle: body.seoTitle !== undefined ? (body.seoTitle || undefined) : existing.seoTitle,
     seoDescription:
       body.seoDescription !== undefined ? (body.seoDescription || undefined) : existing.seoDescription,
+    focusKeyword:
+      body.focusKeyword !== undefined ? (body.focusKeyword.trim() || undefined) : existing.focusKeyword,
+    seoKeywords: Array.isArray(body.seoKeywords) ? dedupeKeywords(body.seoKeywords) : existing.seoKeywords,
     // First publish stamps publishedAt; later edits to an already-published
     // post don't bump it, so "published" date stays stable.
     publishedAt:

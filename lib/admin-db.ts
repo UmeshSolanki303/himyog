@@ -40,6 +40,8 @@ export interface AdminBlogPost {
   status: "draft" | "published";
   seoTitle?: string;
   seoDescription?: string;
+  focusKeyword?: string; // main search phrase the post targets
+  seoKeywords?: string[]; // extra keywords for <meta keywords> / JSON-LD
   publishedAt?: string; // set the first time status becomes "published"
   createdAt: string;
   updatedAt: string;

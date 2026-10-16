@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMetadata, PAGE_SEO } from "@/lib/seo";
 import Link from "next/link";
 import { ArrowRight, Clock, Monitor } from "lucide-react";
 import { courses, getCourseUrl } from "@/lib/courses";
@@ -8,11 +9,7 @@ import { CtaButton } from "@/components/CtaButton";
 import { Footer } from "@/components/Footer";
 import { PageHero } from "@/components/PageHero";
 
-export const metadata: Metadata = {
-  title: "Courses",
-  description:
-    "Explore our Preconception, Prenatal, Garbhsamskar, Postnatal, Pregnancy Wellness Retreat, TTC Yoga, and Meditation courses. Structured programs to support every stage of your journey.",
-};
+export const metadata: Metadata = pageMetadata(PAGE_SEO.courses);
 
 // Real course photos can be added any time from /admin/site-images —
 // revalidate periodically rather than only at build time.
@@ -27,7 +24,7 @@ export default async function CoursesPage() {
     <main>
       <PageHero
         title="Our Courses"
-        description="Structured programs designed to support you through every stage of pregnancy, birth, and the fourth trimester."
+        description="Fertility yoga, prenatal yoga, Garbh Sanskar, postnatal recovery and prenatal yoga teacher training — structured programs for every stage, live online and in Rishikesh."
       />
 
       <section className="py-12 sm:py-20 md:py-24 bg-beige-50 w-full">

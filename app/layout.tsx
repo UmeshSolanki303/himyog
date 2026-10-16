@@ -3,6 +3,7 @@ import { Playfair_Display, Source_Sans_3 } from "next/font/google";
 import { Header } from "@/components/Header";
 import { FloatingWriteReviewButton } from "@/components/WriteReviewButton";
 import { courses, getCourseUrl } from "@/lib/courses";
+import { COURSE_SEO, LOGO_URL, INSTAGRAM_URL, DEFAULT_SHARE_IMAGE } from "@/lib/seo";
 import "./globals.css";
 
 const playfair = Playfair_Display({
@@ -30,14 +31,14 @@ export const metadata: Metadata = {
     shortcut: `${bp}/images/logo.jpeg`,
   },
   title: {
-    default: "Matrushakti Yog | Prenatal & Postnatal Yoga Classes",
+    default: "Matrushakti Yog | Prenatal & Postnatal Yoga in Rishikesh & Online",
     template: "%s | Matrushakti Yog",
   },
   verification: {
     google: "RqWLJbcd0KAPq0xhWf-jORijQK30lnAJww9tih96ikg",
   },
   description:
-    "Nurturing your journey through motherhood with prenatal and postnatal yoga. Safe classes for every trimester, baby-and-me sessions, and expert-led information. Find balance, strength, and peace.",
+    "Expert-led prenatal & postnatal yoga online and in Rishikesh — pregnancy yoga for every trimester, Garbh Sanskar, postpartum recovery & teacher training.",
   keywords: [
     "prenatal yoga",
     "postnatal yoga",
@@ -49,6 +50,10 @@ export const metadata: Metadata = {
     "postnatal classes",
     "yoga for pregnancy",
     "fourth trimester yoga",
+    "garbh sanskar",
+    "prenatal yoga rishikesh",
+    "pregnancy yoga online india",
+    "prenatal yoga teacher training",
     "matrushakti yog",
   ],
   authors: [{ name: "Matrushakti Yog" }],
@@ -58,23 +63,17 @@ export const metadata: Metadata = {
     locale: "en_IN",
     url: siteUrl,
     siteName: "Matrushakti Yog",
-    title: "Matrushakti Yog | Prenatal & Postnatal Health & Yoga",
+    title: "Matrushakti Yog | Prenatal & Postnatal Yoga in Rishikesh & Online",
     description:
-      "Nurturing your journey through motherhood with prenatal and postnatal yoga. Find balance, strength, and peace.",
-    images: [
-      {
-        url: "/og-image.jpg",
-        width: 1200,
-        height: 630,
-        alt: "Matrushakti Yog - Prenatal & Postnatal Yoga",
-      },
-    ],
+      "Expert-led prenatal & postnatal yoga, Garbh Sanskar and pregnancy retreats — live online across India and in Rishikesh.",
+    images: [{ url: DEFAULT_SHARE_IMAGE, alt: "Matrushakti Yog — Prenatal & Postnatal Yoga" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Matrushakti Yog | Prenatal & Postnatal Yoga",
+    title: "Matrushakti Yog | Prenatal & Postnatal Yoga in Rishikesh & Online",
     description:
-      "Nurturing your journey through motherhood with prenatal and postnatal yoga.",
+      "Expert-led prenatal & postnatal yoga, Garbh Sanskar and pregnancy retreats — online and in Rishikesh.",
+    images: [DEFAULT_SHARE_IMAGE],
   },
   robots: {
     index: true,
@@ -83,9 +82,6 @@ export const metadata: Metadata = {
       index: true,
       follow: true,
     },
-  },
-  alternates: {
-    canonical: siteUrl,
   },
 };
 
@@ -99,10 +95,11 @@ const jsonLd = {
       url: siteUrl,
       logo: {
         "@type": "ImageObject",
-        url: `${siteUrl}/logo-bk.png`,
+        url: LOGO_URL,
       },
+      image: LOGO_URL,
       description:
-        "Prenatal and postnatal yoga classes. Safe, nurturing classes for pregnancy and the fourth trimester.",
+        "Prenatal and postnatal yoga studio in Rishikesh offering pregnancy yoga, Garbh Sanskar, postpartum recovery, pregnancy retreats and prenatal yoga teacher training — in person and live online across India.",
       email: "matrushaktiyog@gmail.com",
       telephone: "+91-93899-53873",
       address: {
@@ -113,23 +110,37 @@ const jsonLd = {
         postalCode: "249137",
         addressCountry: "IN",
       },
-      areaServed: "IN",
-      sameAs: [],
+      areaServed: [
+        { "@type": "City", name: "Rishikesh" },
+        { "@type": "Country", name: "India" },
+      ],
+      knowsAbout: [
+        "Prenatal yoga",
+        "Postnatal yoga",
+        "Garbh Sanskar",
+        "Fertility yoga",
+        "Postpartum recovery",
+        "Prenatal yoga teacher training",
+        "Meditation",
+      ],
+      sameAs: [INSTAGRAM_URL],
     },
     {
       "@type": "WebSite",
       "@id": `${siteUrl}/#website`,
       url: siteUrl,
       name: "Matrushakti Yog",
-      description: "Prenatal & Postnatal Health & Yoga",
+      description: "Prenatal & postnatal yoga in Rishikesh and online",
       publisher: { "@id": `${siteUrl}/#organization` },
       inLanguage: "en-IN",
     },
     ...courses.map((course) => ({
       "@type": "Service",
       "@id": `${siteUrl}/#${course.slug}`,
-      name: course.title,
+      name: COURSE_SEO[course.slug]?.title ?? course.title,
       description: course.shortDescription,
+      serviceType: course.title,
+      areaServed: { "@type": "Country", name: "India" },
       provider: { "@id": `${siteUrl}/#organization` },
       url: `${siteUrl}${getCourseUrl(course.slug)}`,
     })),
@@ -151,7 +162,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${playfair.variable} ${sourceSans.variable}`}>
+    <html lang="en-IN" className={`${playfair.variable} ${sourceSans.variable}`}>
       <head>
         <script
           type="application/ld+json"
